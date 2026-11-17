@@ -1,0 +1,49 @@
+{
+  "flujo": {
+    "d": 6.0,
+    "b": 2.0,
+    "h": 1.5,
+    "v1": 1.0,
+    "rho": 1000.0,
+    "g": 9.81,
+    "P1": 7357.5,
+    "f": 0.3
+  },
+  "tronco": {
+    "rho_mad": 750.0,
+    "D_t": 0.25,
+    "L_t": 1.5,
+    "C_D_t": 1.1,
+    "A_sub_ratio": 0.7,
+    "v0": 0.5,
+    "u_corriente": 2.0
+  },
+  "rejilla": {
+    "rho_s": 7850.0,
+    "theta0_deg": 15.0,
+    "H_eje": 2.1,
+    "h_agua": 1.5,
+    "b_canal": 2.0,
+    "r_c": 0.85,
+    "m_brazo": 18.0,
+    "m_c": 250.0,
+    "C_D_r": 1.8,
+    "u_corriente": 1.0
+  },
+  "impacto": {
+    "y_imp": 1.42,
+    "dt_imp": 0.06,
+    "e": 0.0,
+    "k_contacto": 500000.0,
+    "c_contacto": 1200.0
+  },
+  "oxigeno": {
+    "OD_sat": 8.3,
+    "demanda_esteq_celulosa": 1.19
+  },
+  "unificar_velocidad_corriente": false,
+  "u_unificada": 1.0,
+  "seed": 42,
+  "version": "2.1.0-Etapa3-CUC",
+  "etiqueta_estado": "VERIFICACI\u00d3N NUM\u00c9RICA (PAR\u00c1METROS ADOPTADOS - NO VALIDADO EN CAMPO)"
+}
