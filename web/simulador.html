@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simulador de Física Mecánica - Box Culvert y Rejilla Mallorquín</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
   <style>
     :root {
       --primary: #1d4ed8;
@@ -79,8 +82,12 @@
 
     .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
     @media (max-width: 900px) { .charts-grid { grid-template-columns: 1fr; } }
-    .chart-box { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; min-height: 280px; }
+    .chart-box { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
     .chart-box h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; text-align: center; }
+    .chart-wrap { position: relative; width: 100%; height: 260px; }
+    .chart-wrap.tall { height: 340px; }
+    .katex { font-size: 1.05em; text-transform: none; }
+    .metric-value .katex { font-family: inherit; }
 
     table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 0.5rem; }
     th, td { padding: 0.5rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
@@ -103,7 +110,7 @@
     <div id="semaforo" class="semaforo green">
       <div>
         <h3 id="semaforo-title">🟢 REJILLA CERRADA (APOYADA EN TOPE)</h3>
-        <div class="semaforo-info" id="semaforo-desc">N_tope = 111.8 N (20.7 % del valor con sección libre) | Apertura crítica: f_ap = 0.378</div>
+        <div class="semaforo-info" id="semaforo-desc">\(N_{\text{tope}}\) = 111.8 N (20.7 % del valor con sección libre) | Apertura crítica: \(f_{\text{ap}}\) = 0.378</div>
       </div>
       <div style="font-weight: 700; font-size: 1.1rem;" id="semaforo-badge">SEGURA</div>
     </div>
@@ -123,7 +130,7 @@
 
           <div class="control-group">
             <div class="control-label">
-              <span>Fracción obstruida (f):</span>
+              <span>Fracción obstruida \(f\):</span>
               <span id="val_f">0.30</span>
             </div>
             <input type="range" id="slider_f" min="0.00" max="0.85" step="0.01" value="0.30" oninput="actualizar()">
@@ -131,7 +138,7 @@
 
           <div class="control-group">
             <div class="control-label">
-              <span>Vel. entrada v₁ (m/s):</span>
+              <span>Vel. entrada \(v_1\) (m/s):</span>
               <span id="val_v1">1.00</span>
             </div>
             <input type="range" id="slider_v1" min="0.50" max="2.50" step="0.05" value="1.00" oninput="actualizar()">
@@ -139,7 +146,7 @@
 
           <div class="control-group">
             <div class="control-label">
-              <span>Masa del tronco mt (kg):</span>
+              <span>Masa del tronco \(m_t\) (kg):</span>
               <span id="val_mt">55.2</span>
             </div>
             <input type="range" id="slider_mt" min="20.0" max="150.0" step="1.0" value="55.2" oninput="actualizar()">
@@ -147,7 +154,7 @@
 
           <div class="control-group">
             <div class="control-label">
-              <span>Masa contrapeso mc (kg):</span>
+              <span>Masa contrapeso \(m_c\) (kg):</span>
               <span id="val_mc">250.0</span>
             </div>
             <input type="range" id="slider_mc" min="50.0" max="450.0" step="5.0" value="250.0" oninput="actualizar()">
@@ -155,7 +162,7 @@
 
           <div class="control-group">
             <div class="control-label">
-              <span>Coef. restitución (e):</span>
+              <span>Coef. restitución \(e\):</span>
               <span id="val_e">0.00</span>
             </div>
             <input type="range" id="slider_e" min="0.00" max="0.60" step="0.05" value="0.00" oninput="actualizar()">
@@ -163,7 +170,7 @@
 
           <div class="control-group">
             <div class="control-label">
-              <span>Duración impacto Δt (s):</span>
+              <span>Duración impacto \(\Delta t_{\text{imp}}\) (s):</span>
               <span id="val_dt">0.060</span>
             </div>
             <input type="range" id="slider_dt" min="0.02" max="0.15" step="0.005" value="0.060" oninput="actualizar()">
@@ -171,7 +178,7 @@
 
           <div class="control-group">
             <div class="control-label">
-              <span>Vel. corriente u (m/s) [Unificada]:</span>
+              <span>Vel. corriente \(u\) (m/s) [Unificada]:</span>
               <span id="val_u">1.00</span>
             </div>
             <input type="range" id="slider_u" min="0.50" max="2.50" step="0.05" value="1.00" oninput="actualizar()">
@@ -195,27 +202,27 @@
         <div class="tab-content active" id="tab-0">
           <div class="metrics-grid">
             <div class="metric">
-              <div class="metric-title">Velocidad Salida v₂</div>
+              <div class="metric-title">Velocidad Salida \(v_2\)</div>
               <div class="metric-value" id="m_v2">1.429 m/s</div>
               <div class="metric-sub" id="m_v2_sub">+42.9 % vs entrada</div>
             </div>
             <div class="metric">
-              <div class="metric-title">Fuerza Neta ΣFx</div>
+              <div class="metric-title">Fuerza Neta \(\Sigma F_x\)</div>
               <div class="metric-value" id="m_Fx">1285.7 N</div>
-              <div class="metric-sub">ρ·Q·Δv (vol. control)</div>
+              <div class="metric-sub">\(\rho\,Q\,\Delta v\) (vol. control)</div>
             </div>
             <div class="metric">
-              <div class="metric-title">Reacción Axial Rx</div>
+              <div class="metric-title">Reacción Axial \(R_x\)</div>
               <div class="metric-value" id="m_Rx">6428.9 N</div>
-              <div class="metric-sub">P₁A₁ - P₂A₂ - ΣFx</div>
+              <div class="metric-sub">\(P_1A_1 - P_2A_2 - \Sigma F_x\)</div>
             </div>
             <div class="metric">
               <div class="metric-title">Trabajo por masa</div>
               <div class="metric-value" id="m_w">0.520 J/kg</div>
-              <div class="metric-sub">½(v₂² - v₁²)</div>
+              <div class="metric-sub">\(\tfrac{1}{2}(v_2^2 - v_1^2)\)</div>
             </div>
             <div class="metric">
-              <div class="metric-title">Tronco t (RK4)</div>
+              <div class="metric-title">Tronco \(t\) (RK4)</div>
               <div class="metric-value" id="m_trk4">3.515 s</div>
               <div class="metric-sub" id="m_wtronco">W = 92.6 J</div>
             </div>
@@ -223,12 +230,12 @@
 
           <div class="charts-grid">
             <div class="chart-box">
-              <h4>Trayectoria Cinemática: Posición x(t) y Velocidad v(t)</h4>
-              <canvas id="chart_cinematica"></canvas>
+              <h4>Trayectoria Cinemática: Posición \(x(t)\) y Velocidad \(v(t)\)</h4>
+              <div class="chart-wrap"><canvas id="chart_cinematica"></canvas></div>
             </div>
             <div class="chart-box">
-              <h4>Distribución de Fuerza Axial y Trabajo (W = ∫ F dx)</h4>
-              <canvas id="chart_fuerza"></canvas>
+              <h4>Distribución de Fuerza Axial y Trabajo \(\left(W = \int F\,dx\right)\)</h4>
+              <div class="chart-wrap"><canvas id="chart_fuerza"></canvas></div>
             </div>
           </div>
         </div>
@@ -237,24 +244,24 @@
         <div class="tab-content" id="tab-1">
           <div class="metrics-grid">
             <div class="metric">
-              <div class="metric-title">Fuerza en Tope N_tope</div>
+              <div class="metric-title">Fuerza en Tope \(N_{\text{tope}}\)</div>
               <div class="metric-value" id="m_Ntope">111.8 N</div>
-              <div class="metric-sub" id="m_Ntope_sub">Equilibrio Στ_O = 0</div>
+              <div class="metric-sub" id="m_Ntope_sub">Equilibrio \(\Sigma \tau_O = 0\)</div>
             </div>
             <div class="metric">
-              <div class="metric-title">Punto Apertura f_ap</div>
+              <div class="metric-title">Punto Apertura \(f_{\text{ap}}\)</div>
               <div class="metric-value" id="m_fap">0.378</div>
-              <div class="metric-sub">N_tope = 0</div>
+              <div class="metric-sub">\(N_{\text{tope}} = 0\)</div>
             </div>
             <div class="metric">
-              <div class="metric-title">Velocidad Angular ω_f</div>
+              <div class="metric-title">Velocidad Angular \(\omega_f\)</div>
               <div class="metric-value" id="m_omega">0.1434 rad/s</div>
-              <div class="metric-sub">Sistema lineal 2x2 L_O y e</div>
+              <div class="metric-sub">Sistema lineal \(2\times2\): \(L_O\) y \(e\)</div>
             </div>
             <div class="metric">
               <div class="metric-title">Fuerza Impacto Promedio</div>
               <div class="metric-value" id="m_Fprom">1595 N</div>
-              <div class="metric-sub">J / Δt_imp</div>
+              <div class="metric-sub">\(J / \Delta t_{\text{imp}}\)</div>
             </div>
             <div class="metric">
               <div class="metric-title">Deflexión Máxima</div>
@@ -265,12 +272,12 @@
 
           <div class="charts-grid">
             <div class="chart-box">
-              <h4>Curva de Estabilidad de la Rejilla: N_tope vs. f</h4>
-              <canvas id="chart_ntope"></canvas>
+              <h4>Curva de Estabilidad de la Rejilla: \(N_{\text{tope}}\) vs. \(f\)</h4>
+              <div class="chart-wrap"><canvas id="chart_ntope"></canvas></div>
             </div>
             <div class="chart-box">
-              <h4>Oscilación Rotacional Post-Impacto: θ(t) y ω(t)</h4>
-              <canvas id="chart_oscilacion"></canvas>
+              <h4>Oscilación Rotacional Post-Impacto: \(\theta(t)\) y \(\omega(t)\)</h4>
+              <div class="chart-wrap"><canvas id="chart_oscilacion"></canvas></div>
             </div>
           </div>
         </div>
@@ -279,8 +286,8 @@
         <div class="tab-content" id="tab-2">
           <div class="card">
             <h2>📖 Libro de Energía: Balance Mecánico de la Colisión</h2>
-            <div class="chart-box" style="height: 380px;">
-              <canvas id="chart_energia"></canvas>
+            <div class="chart-box">
+              <div class="chart-wrap tall"><canvas id="chart_energia"></canvas></div>
             </div>
           </div>
         </div>
@@ -478,22 +485,53 @@
       if (res.N_tope <= 0.0) {
         sem.className = "semaforo red";
         sTitle.textContent = "🔴 REJILLA SUPERA PAR DE CIERRE (BASCULA PARA ALIVIO)";
-        sDesc.textContent = `N_tope = ${res.N_tope.toFixed(1)} N (Par superado) | Apertura crítica: f_ap = ${res.f_ap.toFixed(3)}`;
+        sDesc.innerHTML = `\\(N_{\\text{tope}}\\) = ${res.N_tope.toFixed(1)} N (Par superado) | Apertura crítica: \\(f_{\\text{ap}}\\) = ${res.f_ap.toFixed(3)}`;
         sBadge.textContent = "ABIERTA";
       } else if (res.N_tope < 107.0) { // < 20%
         sem.className = "semaforo yellow";
         sTitle.textContent = "🟡 ALERTA PREVENTIVA: CERCA DE APERTURA";
-        sDesc.textContent = `N_tope = ${res.N_tope.toFixed(1)} N (< 20% del valor base) | Limpiar antes de f = ${res.f_ap.toFixed(3)}`;
+        sDesc.innerHTML = `\\(N_{\\text{tope}}\\) = ${res.N_tope.toFixed(1)} N (&lt; 20 % del valor base) | Limpiar antes de \\(f\\) = ${res.f_ap.toFixed(3)}`;
         sBadge.textContent = "ALERTA";
       } else {
         sem.className = "semaforo green";
         sTitle.textContent = "🟢 REJILLA CERRADA (APOYADA EN TOPE INFERIOR)";
-        sDesc.textContent = `N_tope = ${res.N_tope.toFixed(1)} N (Margen seguro) | Punto de apertura: f_ap = ${res.f_ap.toFixed(3)}`;
+        sDesc.innerHTML = `\\(N_{\\text{tope}}\\) = ${res.N_tope.toFixed(1)} N (Margen seguro) | Punto de apertura: \\(f_{\\text{ap}}\\) = ${res.f_ap.toFixed(3)}`;
         sBadge.textContent = "SEGURA";
       }
 
       actualizarGraficas(res);
       actualizarVerificaciones(res);
+      renderTex(document.getElementById('semaforo-desc'));
+    }
+
+    // Opciones comunes: sin animación y con tamaño fijo dado por .chart-wrap
+    function opcionesBase(ejeX, ejeY) {
+      return {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        plugins: { legend: { position: 'top' } },
+        scales: {
+          x: { title: { display: !!ejeX, text: ejeX } },
+          y: { title: { display: !!ejeY, text: ejeY } }
+        }
+      };
+    }
+
+    // Crea la gráfica una sola vez; después solo actualiza sus datos
+    function graficar(clave, canvasId, tipo, labels, datasets, opciones) {
+      const existente = charts[clave];
+      if (existente) {
+        existente.data.labels = labels;
+        datasets.forEach((ds, i) => { existente.data.datasets[i].data = ds.data; });
+        existente.update('none');
+        return;
+      }
+      charts[clave] = new Chart(document.getElementById(canvasId), {
+        type: tipo,
+        data: { labels, datasets },
+        options: opciones
+      });
     }
 
     function actualizarGraficas(res) {
@@ -501,117 +539,99 @@
       const ts = [0, 1, 2, 3, 4, 5, res.dt_analit];
       const xs_unif = ts.map(t => res.v1 * t + 0.5 * ((res.v2*res.v2 - res.v1*res.v1)/(2*6)) * t*t);
       const xs_rk4 = ts.map(t => 6.0 * Math.pow(t / res.dt_analit, 1.25));
-
-      if (charts.cinematica) charts.cinematica.destroy();
-      charts.cinematica = new Chart(document.getElementById('chart_cinematica'), {
-        type: 'line',
-        data: {
-          labels: ts.map(t => t.toFixed(2) + 's'),
-          datasets: [
-            { label: 'Analítico (a uniforme)', data: xs_unif, borderColor: '#1d4ed8', borderWidth: 2 },
-            { label: 'Simulación RK4', data: xs_rk4, borderColor: '#dc2626', borderDash: [5, 5], borderWidth: 2 }
-          ]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-      });
+      graficar('cinematica', 'chart_cinematica', 'line',
+        ts.map(t => t.toFixed(2) + ' s'),
+        [
+          { label: 'Analítico (a uniforme)', data: xs_unif, borderColor: '#1d4ed8', borderWidth: 2 },
+          { label: 'Simulación RK4', data: xs_rk4, borderColor: '#dc2626', borderDash: [5, 5], borderWidth: 2 }
+        ],
+        opcionesBase('t (s)', 'x (m)'));
 
       // 2. Fuerza y Trabajo F(x)
       const xs_grid = [0, 1, 2, 3, 4, 5, 6];
       const Fs_grid = xs_grid.map(x => (res.F_vc / 6.0) * (1 + 0.3 * (x/6.0)));
-
-      if (charts.fuerza) charts.fuerza.destroy();
-      charts.fuerza = new Chart(document.getElementById('chart_fuerza'), {
-        type: 'line',
-        data: {
-          labels: xs_grid.map(x => x + ' m'),
-          datasets: [
-            { label: 'Fuerza axial dF/dx (N/m)', data: Fs_grid, borderColor: '#ff7f0e', backgroundColor: 'rgba(255, 127, 14, 0.15)', fill: true, borderWidth: 2 }
-          ]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-      });
+      graficar('fuerza', 'chart_fuerza', 'line',
+        xs_grid.map(x => x + ' m'),
+        [
+          { label: 'Fuerza axial dF/dx (N/m)', data: Fs_grid, borderColor: '#ff7f0e', backgroundColor: 'rgba(255, 127, 14, 0.15)', fill: true, borderWidth: 2 }
+        ],
+        opcionesBase('x (m)', 'dF/dx (N/m)'));
 
       // 3. N_tope vs f
       const f_axis = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7];
       const N_axis = f_axis.map(fv => {
-        const p_temp = { ...params, f: fv };
         const Ap_t = (0.15 + 0.85 * fv) * (2*1.5);
         const FD_t = 0.5 * 1000 * 1.8 * Ap_t * (res.u_val*res.u_val);
         const tau_D_t = FD_t * 1.398 * Math.cos(15 * Math.PI / 180);
         const tau_c = (1772.6 * 1.087 * Math.sin(15*Math.PI/180) - 161.3 * 1.398 * Math.sin(15*Math.PI/180) - 176.6*(0.85/2) - 250*9.81*0.85);
         return -(tau_c + tau_D_t) / 2.174;
       });
-
-      if (charts.ntope) charts.ntope.destroy();
-      charts.ntope = new Chart(document.getElementById('chart_ntope'), {
-        type: 'line',
-        data: {
-          labels: f_axis.map(fv => fv.toFixed(2)),
-          datasets: [
-            { label: 'N_tope (N)', data: N_axis, borderColor: '#2563eb', borderWidth: 2 },
-            { label: 'Línea de Apertura (N=0)', data: f_axis.map(() => 0), borderColor: '#000', borderDash: [4, 4], borderWidth: 1 }
-          ]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-      });
+      graficar('ntope', 'chart_ntope', 'line',
+        f_axis.map(fv => fv.toFixed(2)),
+        [
+          { label: 'Nₜₒₚₑ (N)', data: N_axis, borderColor: '#2563eb', borderWidth: 2 },
+          { label: 'Línea de Apertura (N = 0)', data: f_axis.map(() => 0), borderColor: '#000', borderDash: [4, 4], borderWidth: 1, pointRadius: 0 }
+        ],
+        opcionesBase('f (fracción obstruida)', 'Nₜₒₚₑ (N)'));
 
       // 4. Oscilación rotacional
       const t_rot = [0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.5, 2.0];
       const th_rot = t_rot.map(t => res.dtheta_deg * Math.exp(-1.5 * t) * Math.cos(3.0 * t));
-
-      if (charts.oscilacion) charts.oscilacion.destroy();
-      charts.oscilacion = new Chart(document.getElementById('chart_oscilacion'), {
-        type: 'line',
-        data: {
-          labels: t_rot.map(t => t + 's'),
-          datasets: [
-            { label: 'Ángulo de Deflexión θ(t) [grados]', data: th_rot, borderColor: '#0891b2', borderWidth: 2 }
-          ]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-      });
+      graficar('oscilacion', 'chart_oscilacion', 'line',
+        t_rot.map(t => t + ' s'),
+        [
+          { label: 'Ángulo de deflexión θ(t) [°]', data: th_rot, borderColor: '#0891b2', borderWidth: 2 }
+        ],
+        opcionesBase('t (s)', 'θ (°)'));
 
       // 5. Libro de energía
-      if (charts.energia) charts.energia.destroy();
-      charts.energia = new Chart(document.getElementById('chart_energia'), {
-        type: 'bar',
-        data: {
-          labels: ['Ec Inicial Tronco', 'Ec Rotacional Rejilla', 'Ec Residual Tronco', 'Energía Disipada'],
-          datasets: [{
-            label: 'Energía (Joules)',
-            data: [res.Ec_i, res.Ec_f_rot, res.Ec_f_log, res.E_disipada],
-            backgroundColor: ['#1d4ed8', '#f97316', '#22c55e', '#ef4444']
-          }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-      });
+      graficar('energia', 'chart_energia', 'bar',
+        ['Ec inicial tronco', 'Ec rotacional rejilla', 'Ec residual tronco', 'Energía disipada'],
+        [{
+          label: 'Energía (J)',
+          data: [res.Ec_i, res.Ec_f_rot, res.Ec_f_log, res.E_disipada],
+          backgroundColor: ['#1d4ed8', '#f97316', '#22c55e', '#ef4444']
+        }],
+        opcionesBase('', 'Energía (J)'));
+    }
+
+    // Renderiza notación LaTeX \( ... \) con KaTeX
+    function renderTex(el) {
+      if (window.renderMathInElement && el) {
+        renderMathInElement(el, {
+          delimiters: [{ left: '\\(', right: '\\)', display: false }],
+          throwOnError: false
+        });
+      }
     }
 
     function actualizarVerificaciones(res) {
+      const T = (x) => '\\(' + x + '\\)';
       const checks = [
-        { c: 'Homogeneidad dimensional [F]', f: '[ρ·Q·dv] = kg·m/s²', r: '1 kg·m/s² = 1 N', tol: 'Exacta', p: true },
-        { c: 'Homogeneidad trabajo [W]', f: '[½·m·dv²] = kg·m²/s²', r: '1 N·m = 1 J', tol: 'Exacta', p: true },
-        { c: 'Teorema Trabajo-Energía (Flujo)', f: '|W - ΔEc|', r: '1.09e-3 J', tol: '< 0.05 J', p: true },
-        { c: 'Teorema Trabajo-Energía (Tronco)', f: '|W_trapecio - ΔEc|', r: '2.65e-4 J', tol: '< 1e-3 J', p: true },
-        { c: 'Conservación Momento Angular L_O', f: '|L_O,f - L_O,i|', r: '0.00e+00 kg·m²/s', tol: '< 1e-9', p: true },
-        { c: 'Fuerza neta independiente de perfil', f: '∫ρ A a dx vs ρ Q dv', r: `${res.F_vc.toFixed(1)} N = ${res.F_vc.toFixed(1)} N`, tol: '< 0.1 N', p: true },
-        { c: 'Convergencia temporal RK4 (Flujo)', f: '|t(1ms) - t(0.1ms)|', r: '0.0000 s', tol: '< 1e-4 s', p: true },
-        { c: 'Convergencia temporal RK4 (Tronco)', f: '|t(1ms) - t(0.1ms)|', r: '0.0000 s', tol: '< 1e-4 s', p: true },
-        { c: 'Caso límite f = 0', f: 'v2 -> v1, F -> 0', r: 'v2=1.00 m/s, F=0 N', tol: '< 1e-9', p: true },
-        { c: 'Caso límite v0 -> u_w', f: 'F_arrastre -> 0', r: 'F_arr = 0 N', tol: '< 1e-6 N', p: true },
-        { c: 'Caso límite I_O -> ∞', f: 'ω_f -> 0', r: 'ω_f = 0.0000 rad/s', tol: '< 1e-6', p: true }
+        { c: 'Homogeneidad dimensional ' + T('[F]'), f: T('[\\rho\\,Q\\,\\Delta v] = \\mathrm{kg\\cdot m/s^2}'), r: T('1\\ \\mathrm{kg\\cdot m/s^2} = 1\\ \\mathrm{N}'), tol: 'Exacta', p: true },
+        { c: 'Homogeneidad trabajo ' + T('[W]'), f: T('[\\tfrac{1}{2} m\\,\\Delta v^2] = \\mathrm{kg\\cdot m^2/s^2}'), r: T('1\\ \\mathrm{N\\cdot m} = 1\\ \\mathrm{J}'), tol: 'Exacta', p: true },
+        { c: 'Teorema Trabajo-Energía (Flujo)', f: T('|W - \\Delta E_c|'), r: T('1.09\\times10^{-3}\\ \\mathrm{J}'), tol: T('< 0.05\\ \\mathrm{J}'), p: true },
+        { c: 'Teorema Trabajo-Energía (Tronco)', f: T('|W_{\\text{trapecio}} - \\Delta E_c|'), r: T('2.65\\times10^{-4}\\ \\mathrm{J}'), tol: T('< 10^{-3}\\ \\mathrm{J}'), p: true },
+        { c: 'Conservación Momento Angular ' + T('L_O'), f: T('|L_{O,f} - L_{O,i}|'), r: T('0\\ \\mathrm{kg\\cdot m^2/s}'), tol: T('< 10^{-9}'), p: true },
+        { c: 'Fuerza neta independiente de perfil', f: T('\\int \\rho A\\,a\\,dx \;\\text{vs}\; \\rho\\,Q\\,\\Delta v'), r: `${res.F_vc.toFixed(1)} N = ${res.F_vc.toFixed(1)} N`, tol: T('< 0.1\\ \\mathrm{N}'), p: true },
+        { c: 'Convergencia temporal RK4 (Flujo)', f: T('|t_{1\\,\\mathrm{ms}} - t_{0.1\\,\\mathrm{ms}}|'), r: '0.0000 s', tol: T('< 10^{-4}\\ \\mathrm{s}'), p: true },
+        { c: 'Convergencia temporal RK4 (Tronco)', f: T('|t_{1\\,\\mathrm{ms}} - t_{0.1\\,\\mathrm{ms}}|'), r: '0.0000 s', tol: T('< 10^{-4}\\ \\mathrm{s}'), p: true },
+        { c: 'Caso límite ' + T('f = 0'), f: T('v_2 \\to v_1,\; F \\to 0'), r: T('v_2 = 1.00\\ \\mathrm{m/s},\; F = 0\\ \\mathrm{N}'), tol: T('< 10^{-9}'), p: true },
+        { c: 'Caso límite ' + T('v_0 \\to u_w'), f: T('F_{\\text{arrastre}} \\to 0'), r: T('F_{\\text{arr}} = 0\\ \\mathrm{N}'), tol: T('< 10^{-6}\\ \\mathrm{N}'), p: true },
+        { c: 'Caso límite ' + T('I_O \\to \\infty'), f: T('\\omega_f \\to 0'), r: T('\\omega_f = 0.0000\\ \\mathrm{rad/s}'), tol: T('< 10^{-6}'), p: true }
       ];
 
       const tbody = document.getElementById('tabla_verif');
       tbody.innerHTML = checks.map(it => `
         <tr>
           <td><strong>${it.c}</strong></td>
-          <td><code>${it.f}</code></td>
+          <td>${it.f}</td>
           <td>${it.r}</td>
           <td>${it.tol}</td>
           <td><span class="badge pass">PASA</span></td>
         </tr>
       `).join('');
+      renderTex(tbody);
     }
 
     function correrMonteCarlo() {
@@ -621,16 +641,17 @@
         container.innerHTML = `
           <table>
             <thead>
-              <tr><th>Variable</th><th>P5 (Conservador)</th><th>P50 (Mediana)</th><th>P95 (Extremo)</th><th>Media ± Desv</th></tr>
+              <tr><th>Variable</th><th>\\(P_{5}\\) (Conservador)</th><th>\\(P_{50}\\) (Mediana)</th><th>\\(P_{95}\\) (Extremo)</th><th>Media \\(\\pm\\) Desv</th></tr>
             </thead>
             <tbody>
-              <tr><td><strong>Fuerza en Tope N_tope (N)</strong></td><td>-631.9 N</td><td>-4.7 N</td><td>428.0 N</td><td>-40.3 ± 315 N</td></tr>
-              <tr><td><strong>Fuerza de Impacto F_prom (N)</strong></td><td>926.8 N</td><td>1431.6 N</td><td>2546.8 N</td><td>1480 ± 420 N</td></tr>
+              <tr><td><strong>Fuerza en Tope \\(N_{\\text{tope}}\\) (N)</strong></td><td>-631.9 N</td><td>-4.7 N</td><td>428.0 N</td><td>-40.3 ± 315 N</td></tr>
+              <tr><td><strong>Fuerza de Impacto \\(F_{\\text{prom}}\\) (N)</strong></td><td>926.8 N</td><td>1431.6 N</td><td>2546.8 N</td><td>1480 ± 420 N</td></tr>
               <tr><td><strong>Deflexión Angular Máxima (°)</strong></td><td>0.00°</td><td>0.81°</td><td>33.50°</td><td>6.20 ± 9.8°</td></tr>
             </tbody>
           </table>
           <p style="margin-top:0.75rem; font-weight:700; color:#b91c1c;">Probabilidad de Apertura de la Rejilla: 50.8 %</p>
         `;
+        renderTex(container);
       }, 300);
     }
 
@@ -647,6 +668,7 @@
     // Inicializar al cargar
     window.onload = () => {
       actualizar();
+      renderTex(document.body);
     };
   </script>
 </body>

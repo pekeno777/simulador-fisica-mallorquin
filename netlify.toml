@@ -1,0 +1,9 @@
+[build]
+  publish = "web"
+  command = ""
+
+# Serve the standalone simulator at the site root
+[[redirects]]
+  from = "/"
+  to = "/simulador.html"
+  status = 200
