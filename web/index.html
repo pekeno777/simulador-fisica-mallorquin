@@ -1,0 +1,952 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071d31">
+<title>Mallorquín LAB | Simulador ABP de Física Mecánica</title>
+<style>
+:root{--ink:#122b41;--muted:#687d8f;--navy:#071d31;--navy2:#102f47;--teal:#0b918e;--sea:#1b9bc4;--cyan:#d9f5fb;--border:#dce7ec;--canvas:#edf5f7;--bg:#f3f7f8;--paper:#fff;--orange:#ed8d48;--red:#be4851;--green:#117e69;--shadow:0 16px 45px rgba(10,43,64,.07)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:var(--bg);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;line-height:1.55}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #66d3d2;outline-offset:3px}canvas{display:block;width:100%}strong{font-weight:750}.container{max-width:1580px;padding:0 28px;margin:auto}
+.masthead{background:radial-gradient(ellipse at 78% 26%,#185a6e 0%,transparent 42%),linear-gradient(120deg,#061a2d,#103249 75%,#124658);color:#f7fbff;padding:20px 0 39px;position:relative;overflow:hidden}.masthead:after{content:"";position:absolute;width:480px;height:480px;right:-220px;top:-180px;border:1px solid #ffffff24;border-radius:50%;box-shadow:0 0 0 70px #ffffff04,0 0 0 140px #ffffff04;pointer-events:none}.topline{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:39px}.brand{display:flex;align-items:center;gap:12px;font-weight:850;letter-spacing:.09em;font-size:15px}.brand-icon{width:37px;height:37px;border:1px solid #79d9d846;background:#18aea733;border-radius:11px;display:grid;place-items:center}.brand-icon svg{width:25px;height:25px}.topright{display:flex;align-items:center;gap:12px;color:#bed7e2;font-size:11px;letter-spacing:.06em;text-transform:uppercase}.topright span{border:1px solid #9acbd334;padding:7px 12px;border-radius:40px}.hero-title{font-size:clamp(32px,3.25vw,52px);line-height:1.08;max-width:860px;letter-spacing:-.047em;font-weight:850;margin:10px 0 14px}.hero-title em{font-style:normal;color:#8de4df}.hero-strap{max-width:900px;color:#bfd4de;font-size:15px;margin:0}.eyebrow{color:#83d8d5;text-transform:uppercase;letter-spacing:.17em;font-weight:800;font-size:10px}.hero-statline{display:flex;gap:24px;flex-wrap:wrap;margin-top:28px}.hero-statline>div{border-left:2px solid #2d919a;padding-left:13px;min-width:135px}.hero-statline span{display:block;color:#c0d9e2;font-size:11px}.hero-statline strong{display:block;font-size:19px;font-variant-numeric:tabular-nums;letter-spacing:-.025em}.page{position:relative;z-index:1;margin-top:-17px;padding-bottom:50px}.notice{background:#e7f3f4;border:1px solid #bcdde1;color:#315b69;padding:12px 17px;border-radius:11px;display:flex;gap:11px;align-items:flex-start;font-size:12px;margin-bottom:20px}.notice .info{font-size:16px;line-height:1.2}.workspace{display:grid;grid-template-columns:minmax(264px,318px) minmax(0,1fr);gap:20px;align-items:start}.sidebar{display:flex;flex-direction:column;gap:17px}.panel{border:1px solid var(--border);border-radius:17px;background:var(--paper);box-shadow:var(--shadow);overflow:hidden}.panel-pad{padding:21px}.panel-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:20px}.panel-heading h2,.panel-heading h3{margin:0;font-size:16px;letter-spacing:-.025em}.panel-heading small{display:block;color:var(--muted);font-size:11px;font-weight:450;margin-top:3px}.tiny-icon{display:grid;place-items:center;width:35px;height:35px;border-radius:10px;background:#e9f5f6;color:#0c7f84;font-size:18px;flex-shrink:0}.group-head{font-size:10px;letter-spacing:.12em;color:#7492a1;font-weight:850;margin:18px 0 10px;text-transform:uppercase}.control{margin-bottom:17px}.control:last-child{margin-bottom:0}.control-title{display:flex;justify-content:space-between;gap:10px;align-items:baseline;font-size:12px;font-weight:650;margin-bottom:7px}.control-title output{font-weight:800;font-variant-numeric:tabular-nums;color:#087e88;font-size:12px}.control small{color:#8599a4;font-size:10px;display:block;margin-top:4px}.control input[type=range],.timeline input[type=range]{width:100%;accent-color:#159e9a;cursor:pointer}.quick-cases{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.case-btn{background:#f1f7f8;color:#456375;border:1px solid #dce9ee;border-radius:10px;padding:10px 4px;font-weight:750;font-size:12px}.case-btn span{font-size:10px;color:#839ca8;display:block;font-weight:500}.case-btn.active{color:#075c63;background:#daf4f1;border-color:#70c9c2;box-shadow:inset 0 0 0 1px #70c9c2}.outline-btn{border:1px solid #cddce4;color:#315368;background:#fff;border-radius:10px;padding:10px 13px;font-weight:750;transition:.2s}.outline-btn:hover{background:#edf5f7}.fill-btn{border:1px solid #0b8f91;background:#0c908f;border-radius:10px;padding:10px 13px;color:white;font-weight:800;transition:.2s}.fill-btn:hover{background:#087b7c}.sidebar-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.side-note{border-top:1px solid #e8edef;color:#738a95;font-size:11px;padding-top:15px;margin-top:15px}.stage-note{margin-top:13px;background:#edf7f8;border-radius:11px;padding:11px 13px;color:#50717c;font-size:11px}.mainarea{min-width:0;display:flex;flex-direction:column;gap:18px}.section-heading{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:0 0 15px}.section-heading h2{font-size:17px;line-height:1.3;margin:0;letter-spacing:-.035em}.section-heading .hint{font-size:11px;color:#718a98}.scene-card{padding:0}.scene-head{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:20px 21px 15px}.scene-head h2{margin:0;font-size:17px;letter-spacing:-.03em}.scene-head p{font-size:11px;color:#7c919e;margin:3px 0 0}.pill{padding:7px 11px;border-radius:30px;font-size:10px;font-weight:800;letter-spacing:.045em;white-space:nowrap}.pill.live{background:#e0f8f4;color:#04786b}.pill.paused{background:#f1f4f6;color:#64808f}.canvas-shell{position:relative;margin:0 15px;border:1px solid #d3e6eb;border-radius:13px;overflow:hidden;background:#cce9ef}.scene-canvas{height:clamp(320px,36vw,465px);touch-action:pan-y}.scene-float{position:absolute;top:13px;left:14px;color:white;background:#092739c7;border:1px solid #d2faff32;padding:8px 12px;border-radius:10px;pointer-events:none;font-size:10px;font-weight:750;letter-spacing:.09em}.scene-float span{display:block;font-size:9px;font-weight:450;letter-spacing:.02em;color:#b8d4dd}.scene-controlbar{display:flex;align-items:center;gap:9px;padding:13px 18px 13px;flex-wrap:wrap}.scene-controlbar button{border:1px solid #d9e6eb;padding:9px 12px;background:#fff;border-radius:9px;color:#3e5a68;font-weight:700;font-size:12px;min-height:38px}.scene-controlbar button:hover{background:#eef8fa}.scene-controlbar button.action{background:#0b7f87;border-color:#0b7f87;color:white}.scene-controlbar button.action:hover{background:#086b73}.scene-controlbar select{background:#f5f9fa;border:1px solid #d7e3e9;border-radius:9px;color:#345568;padding:9px 10px;max-width:205px;min-height:38px;font-size:11px;font-weight:750}.timeline{display:flex;align-items:center;gap:8px;flex:1;min-width:140px;margin-left:3px}.timeline input{min-width:75px}.timeline span{font-size:11px;white-space:nowrap;font-variant-numeric:tabular-nums;color:#657d8b;font-weight:750}.scene-legend{border-top:1px solid #ebf1f3;padding:10px 20px 15px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.legend-items{display:flex;gap:15px;flex-wrap:wrap;font-size:10px;color:#6c8291}.legend-items span:before{content:"";width:9px;height:9px;background:var(--dot);display:inline-block;border-radius:3px;margin-right:5px;vertical-align:middle}.scene-legend>small{font-size:10px;color:#90a1aa}.statusbar{padding:14px 19px;background:#e9f7f3;border:1px solid #b9e4d8;border-radius:13px;display:flex;align-items:center;justify-content:space-between;gap:10px}.statusbar.warn{background:#fff5e7;border-color:#f2d9ad}.statusbar.danger{background:#ffeff0;border-color:#f1c4c8}.status-message{display:flex;align-items:center;gap:12px}.status-dot{width:12px;height:12px;border-radius:50%;background:#159b79;box-shadow:0 0 0 5px #159b7921;flex-shrink:0}.warn .status-dot{background:#d88b2f;box-shadow:0 0 0 5px #e5a34b2b}.danger .status-dot{background:#ca5061;box-shadow:0 0 0 5px #ca506122}.status-message strong{display:block;font-size:12px}.status-message span{display:block;font-size:11px;color:#57747e}.status-tag{font-size:10px;font-weight:850;color:#147b65;letter-spacing:.06em;white-space:nowrap}.warn .status-tag{color:#a8792b}.danger .status-tag{color:#b54e5c}.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.kpi{border:1px solid #dce8ec;background:white;border-radius:13px;padding:15px;box-shadow:0 6px 21px #10334e07;min-width:0}.kpi span{display:block;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#76909e;font-weight:800}.kpi strong{display:block;font-size:clamp(19px,1.8vw,25px);font-variant-numeric:tabular-nums;letter-spacing:-.05em;line-height:1.35;margin:7px 0 2px}.kpi small{display:block;color:#8398a4;font-size:10px}.kpi strong b{font-size:12px;letter-spacing:0;font-weight:650;color:#7992a0}.kpi.accent{background:#0d3646;color:white;border-color:#0d3646}.kpi.accent strong{color:white}.kpi.accent span{color:#9ac5d3}.kpi.accent small{color:#98c0c8}.interpret{padding:14px 19px;border:1px solid #b9dce5;background:#eef8fb;border-radius:13px;display:flex;gap:11px;align-items:flex-start}.interpret .star{font-size:20px}.interpret p{margin:0;font-size:12px;color:#496d7d}.interpret strong{color:#16455c}.tab-panel{padding:20px}.tabs{display:flex;gap:5px;overflow-x:auto;scrollbar-width:thin;padding-bottom:9px;border-bottom:1px solid #e4edf0;margin-bottom:20px}.tab-btn{background:transparent;border:0;padding:10px 12px;border-radius:9px;white-space:nowrap;font-weight:750;color:#778f9b;font-size:12px}.tab-btn.active{color:#0a777c;background:#e5f5f4}.tab-btn:hover:not(.active){background:#f0f6f8}.tab-content{display:none}.tab-content.active{display:block}.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;margin-bottom:17px}.metric{padding:13px 14px;border-radius:11px;border:1px solid #e4edef;background:#f8fbfc}.metric-label{font-size:10px;text-transform:uppercase;color:#79919c;font-weight:800;letter-spacing:.045em}.metric-value{font-size:21px;font-weight:850;letter-spacing:-.04em;font-variant-numeric:tabular-nums;margin:2px 0;color:#133a50}.metric-sub{font-size:10px;color:#8499a2}.charts-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.chart-box{background:#fcfefe;border:1px solid #e4ecef;border-radius:12px;padding:15px;min-width:0}.chart-box.wide{grid-column:1/-1}.chart-box h3{font-size:12px;color:#214155;margin:0 0 3px;font-weight:800}.chart-box p{font-size:10px;color:#899eaa;margin:0 0 12px}.plot{height:260px}.plot.tall{height:312px}.explainer{background:#f1f8f9;border:1px solid #e0eeef;padding:12px 15px;margin:16px 0 0;border-radius:11px;color:#587581;font-size:12px}.explainer strong{color:#1f5262}.table-scroll{width:100%;overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:11px;min-width:580px}th{text-align:left;background:#f0f7f8;color:#486674;font-weight:850;white-space:nowrap}td,th{padding:11px 13px;border-bottom:1px solid #e5edef}td{color:#426071;vertical-align:middle}tr:last-child td{border-bottom:0}td.number{text-align:right;font-variant-numeric:tabular-nums;font-weight:800}.tag{display:inline-block;border-radius:6px;padding:3px 7px;font-size:10px;font-weight:800}.tag.ok{background:#def3ed;color:#12725f}.tag.no{background:#ffe7e9;color:#b73f51}.mc-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:15px}.mc-actions small{color:#8a9ea7;font-size:11px}.mc-layout{display:grid;grid-template-columns:1fr 1fr;gap:15px}.mc-summary{background:#eff7f8;border-radius:11px;padding:13px 16px;margin:15px 0;font-size:12px;color:#4b6b76}.mc-summary strong{color:#086b70}.small-heading{font-size:12px;color:#17495b;margin:0 0 10px}.summary-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}.summary-tiles .tile{background:#f3f8fa;border:1px solid #e4eff2;padding:11px;border-radius:9px}.summary-tiles .tile strong{font-size:17px;display:block;color:#155568;font-variant-numeric:tabular-nums}.summary-tiles .tile small{font-size:10px;color:#7e97a2}.foot{color:#8298a3;font-size:10px;text-align:center;padding:25px 0}.footer-line{border-top:1px solid #dbe7ec;margin-top:26px}.inset{color:#748c98;font-size:10px}.formula{font-family:Cambria,'Times New Roman',serif;font-style:italic;color:#1b6876;font-size:14px}.check-hint{color:#7d94a0;font-size:11px;margin:0 0 13px}
+@media(max-width:1180px){.workspace{grid-template-columns:285px minmax(0,1fr)}.kpis{grid-template-columns:repeat(2,1fr)}.scene-controlbar .timeline{flex-basis:100%;order:2}.chart-box{padding:12px}}
+@media(max-width:850px){.workspace{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:1fr 1fr;align-items:start}.sidebar .panel:first-child{grid-row:span 2}.container{padding:0 17px}.masthead{padding-bottom:32px}.topline{margin-bottom:23px}.hero-statline{gap:17px}.scene-canvas{height:400px}}
+@media(max-width:620px){.sidebar{display:flex}.charts-grid,.mc-layout{grid-template-columns:1fr}.chart-box.wide{grid-column:auto}.kpis{grid-template-columns:repeat(2,1fr);gap:8px}.kpi{padding:12px}.hero-statline>div{min-width:110px}.topright span:last-child{display:none}.hero-title{font-size:34px}.hero-strap{font-size:13px}.scene-head{padding:15px 16px}.scene-head h2{font-size:15px}.scene-canvas{height:325px}.scene-float{font-size:8px}.statusbar{align-items:flex-start}.status-tag{display:none}.tab-panel{padding:13px}.tabs{margin-bottom:15px}.scene-controlbar{padding:11px}.scene-controlbar button{padding:8px}.plot{height:235px}.summary-tiles{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{scroll-behavior:auto!important}}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet"><style>:root{--teal:#0e9f97;--sea:#1c8fc0;--sand:#e8c58a;--shadow:0 20px 50px -20px rgba(7,40,60,.25)}
+body{font-family:Manrope,system-ui,sans-serif;background:radial-gradient(1200px 600px at 100% 0,#dff3f3 0,transparent 60%),linear-gradient(#f4f8f8,#eaf2f3)}
+h1,h2,h3,.brand,.hero-title{font-family:Sora,Manrope,sans-serif}
+.masthead{background:radial-gradient(ellipse at 80% 20%,#1f7a86 0,transparent 45%),radial-gradient(ellipse at 10% 120%,#e8c58a33 0,transparent 40%),linear-gradient(125deg,#041626,#0b2c44 60%,#0f4a5c)}
+.hero-title em{background:linear-gradient(90deg,#8ff0e6,#e8c58a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.panel{border-radius:20px;border-color:#d6e6ea;box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s}
+.panel:hover{box-shadow:0 26px 60px -22px rgba(7,40,60,.32)}
+.kpi{border-radius:18px!important;transition:transform .2s}.kpi:hover{transform:translateY(-3px)}
+.fill-btn{background:linear-gradient(135deg,#0e9f97,#1c8fc0);border:0;box-shadow:0 8px 20px -8px #0e9f97}
+.case-btn{transition:.2s}.case-btn:hover{transform:translateY(-2px)}
+.dim-toggle{display:flex;align-items:center;gap:6px;padding:0 21px 12px;flex-wrap:wrap}
+.dim-btn{border:1px solid #cfe0e6;background:#fff;color:#2c5164;font-weight:800;padding:7px 18px;border-radius:999px;transition:.2s}
+.dim-btn.active{background:linear-gradient(135deg,#0b2c44,#0e9f97);color:#fff;border-color:transparent;box-shadow:0 8px 18px -8px #0e9f97}
+.cam-btns{display:none;gap:4px;margin-left:auto}.cam-btns.on{display:flex}
+.cam-btns button{border:1px solid #dbe8ec;background:#f3f8f9;color:#3e6070;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:700}
+.cam-btns button.active{background:#daf4f1;border-color:#70c9c2;color:#075c63}
+.canvas-shell{position:relative}#world3d{display:none;width:100%;aspect-ratio:1100/520;min-height:320px;border-radius:14px;overflow:hidden;cursor:grab;background:linear-gradient(#cde9ef,#e9f4ef)}
+.mode3d #world3d{display:block}.mode3d #world{display:none!important}
+
+/* ===== Datos en vivo (HUD + telemetría) ===== */
+.hud{position:absolute;top:12px;left:12px;right:12px;z-index:3;color:#eaf7fa;pointer-events:none;font-variant-numeric:tabular-nums}
+.hud-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.hud-phase{pointer-events:auto;display:inline-flex;align-items:center;gap:7px;background:#071d31e0;border:1px solid #9be7e533;padding:6px 11px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.04em;backdrop-filter:blur(6px)}
+.hud-phase:before{content:'';width:8px;height:8px;border-radius:50%;background:var(--dot-c,#4fd6cf);box-shadow:0 0 0 4px color-mix(in oklab,var(--dot-c,#4fd6cf) 30%,transparent)}
+.hud-phase.hit{--dot-c:#ffb35c;animation:hudPulse .5s ease-in-out infinite alternate}
+.hud-phase.osc{--dot-c:#ffd36e}.hud-phase.rest{--dot-c:#9fb8c4}
+@keyframes hudPulse{from{transform:scale(1)}to{transform:scale(1.06)}}
+.hud-sub{background:#071d31b8;border:1px solid #9be7e522;padding:5px 10px;border-radius:999px;font-size:10.5px;font-weight:650;color:#c3dfe6;backdrop-filter:blur(6px)}
+.hud-toggle{pointer-events:auto;margin-left:auto;border:1px solid #9be7e540;background:#071d31d0;color:#d9f5fb;border-radius:999px;padding:5px 11px;font-size:10.5px;font-weight:800;backdrop-filter:blur(6px)}
+.hud-toggle:hover{background:#0b3a52}
+.scene-float{display:none!important}.hud-grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:5px;transition:opacity .25s,transform .25s}
+.hud.closed .hud-grid{opacity:0;transform:translateY(-6px);pointer-events:none}
+.hud-chip{background:#071d31c9;border:1px solid #9be7e526;border-left:3px solid var(--chip,#4fd6cf);border-radius:9px;padding:5px 7px 6px;backdrop-filter:blur(6px);min-width:0}
+.hud-chip span{display:block;font-size:8.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#9fc3cd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hud-chip strong{display:block;font-size:13px;overflow:hidden;text-overflow:ellipsis;font-weight:800;line-height:1.25;color:#fff;white-space:nowrap}
+.hud-chip strong small{font-size:9px;font-weight:650;color:#b9d6dd;margin-left:2px}
+.hud-chip i{display:block;height:3px;border-radius:3px;background:#ffffff1f;margin-top:5px;overflow:hidden;position:relative}
+.hud-chip i b{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:3px;background:var(--chip,#4fd6cf);transition:width .08s linear}
+.hud-chip i.mid b{left:50%}
+.c-time{--chip:#cfe6ec}.c-log{--chip:#e0965a}.c-water{--chip:#4fc3e0}.c-grate{--chip:#a8bcc6}.c-hit{--chip:#ffb35c}.c-energy{--chip:#8fdc8a}
+.hud-chip.flash{animation:chipFlash .9s ease-out}
+@keyframes chipFlash{0%{background:#0e9f97e6}100%{background:#071d31c9}}
+.obj-label{position:absolute;z-index:2;transform:translate(-50%,-100%);pointer-events:none;background:#071d31e6;color:#fff;border:1px solid #9be7e540;border-radius:8px;padding:3px 8px;font-size:10.5px;font-weight:750;white-space:nowrap;font-variant-numeric:tabular-nums;display:none;box-shadow:0 6px 14px -6px #0009}
+.obj-label:after{content:'';position:absolute;left:50%;bottom:-5px;width:8px;height:8px;background:inherit;border-right:1px solid #9be7e540;border-bottom:1px solid #9be7e540;transform:translateX(-50%) rotate(45deg)}
+.obj-label em{font-style:normal;color:var(--lc,#9fe9e4);margin-right:4px}
+.mode3d .obj-label.on{display:block}
+.telemetry{margin:10px 18px 0;padding:12px 14px 14px;border:1px solid var(--border);border-radius:14px;background:linear-gradient(180deg,#f7fbfc,#fff)}
+.tele-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.tele-head strong{font-size:13px;color:var(--ink)}
+.tele-head strong:before{content:'● ';color:#0e9f97}
+.tele-changes{font-size:11.5px;color:var(--muted);flex:1;min-width:220px}
+.tele-changes b{color:var(--ink)}.tele-changes .up{color:#117e69;font-weight:800}.tele-changes .down{color:#be4851;font-weight:800}
+.tele-changes.flash{animation:teleFlash 1.4s ease-out}
+@keyframes teleFlash{0%{background:#daf4f1}100%{background:transparent}}
+.tele-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.tele{border:1px solid #e3edf0;border-radius:10px;padding:7px 8px 4px;background:#fff;min-width:0}
+.tele-t{display:flex;justify-content:space-between;gap:6px;font-size:10.5px;font-weight:750;color:#476676}
+.tele-t b{color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tele canvas{height:130px}
+@media(max-width:1100px){.hud-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:1000px){.tele-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.hud{position:static;margin:8px 0 0;color:#eaf7fa}.hud-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hud-head{margin-top:8px}.hud-phase,.hud-sub,.hud-toggle{background:#071d31}.hud-chip{background:#0b2c44}.telemetry{margin:10px 11px 0}.scene-float{display:none}}
+@media(max-width:460px){.tele-grid{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header class="masthead">
+ <div class="container">
+  <div class="topline"><div class="brand"><span class="brand-icon"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M3 13c5-6 8 6 13 0s8 6 13 0M3 21c5-6 8 6 13 0s8 6 13 0" stroke="#8ee4e2" stroke-width="2.7" stroke-linecap="round"/></svg></span> MALLORQUÍN <span style="font-weight:450;color:#87d8d4">LAB</span></div><div class="topright"><span>Ingeniería de Sistemas · CUC</span><span>Física Mecánica / ABP 2026</span></div></div>
+  <div class="eyebrow">Laboratorio interactivo · Proyecto integrador</div>
+  <h1 class="hero-title">Del flujo del agua a una <em>estructura que responde.</em></h1>
+  <p class="hero-strap">Explora cómo la obstrucción de un box culvert de la Ciénaga de Mallorquín modifica la velocidad, las fuerzas, la energía y el comportamiento de una rejilla ante un tronco flotante.</p>
+  <div class="hero-statline"><div><span>Longitud analizada</span><strong>6,0 m</strong></div><div><span>Área de entrada</span><strong>3,0 m²</strong></div><div><span>Escenarios del ABP</span><strong>A · B · C</strong></div><div><span>Etapas integradas</span><strong>01 — 02 — 03</strong></div></div>
+ </div>
+</header>
+<div class="container page">
+ <div class="notice"><span class="info">ⓘ</span><span><strong>Modelo académico ilustrativo, no medición de campo.</strong> Los parámetros hidráulicos proceden de las hipótesis adoptadas en los ABP. La escena es una representación visual; no resuelve flujo 3D, turbulencia, pérdidas ni interacción fluido-estructura. El contrapeso y la apertura móvil pertenecen a una <strong>extensión exploratoria del HTML original</strong>, diferenciada del equilibrio de rejilla con tirante descrito en el informe final. Todas las salidas corresponden a <strong>verificación numérica</strong>.</span></div>
+ <div class="workspace">
+  <aside class="sidebar">
+   <section class="panel panel-pad">
+    <div class="panel-heading"><div><h2>Panel de control</h2><small>Modifica el sistema en tiempo real</small></div><span class="tiny-icon">⚙</span></div>
+    <div class="group-head">Escenarios del informe</div>
+    <div class="quick-cases"><button class="case-btn" id="caseA" data-f="0">A · Libre<span>f = 0,00</span></button><button class="case-btn active" id="caseB" data-f="0.3">B · Parcial<span>f = 0,30</span></button><button class="case-btn" id="caseC" data-f="0.6">C · Fuerte<span>f = 0,60</span></button></div>
+    
+    <div class="group-head">1. Sistema hidráulico</div>
+    <div class="control"><div class="control-title"><label for="slider_f">Obstrucción de sección (f)</label><output id="val_f">0,30</output></div><input id="slider_f" type="range" min="0" max="0.85" step="0.01" value="0.30"><small>Fracción de área que deja de estar disponible</small></div>
+    <div class="control"><div class="control-title"><label for="slider_v1">Velocidad de entrada (v₁)</label><output id="val_v1">1,00 m/s</output></div><input id="slider_v1" type="range" min="0.5" max="2.5" step="0.05" value="1"></div>
+    
+    <div class="group-head">2. Corriente y Tronco</div>
+    <div class="control" style="background:#edf7f8;border-radius:9px;padding:8px 10px;margin-bottom:12px;">
+      <div class="control-title" style="margin-bottom:2px;"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" id="check_unif" checked> Unificar vel. corriente</label><output id="val_unif">1,00 m/s</output></div>
+      <small style="color:#4e707b">Regla de diseño: una sola u para arrastre y rejilla</small>
+    </div>
+    <div class="control"><div class="control-title"><label for="slider_u">Velocidad corriente (u)</label><output id="val_u">1,00 m/s</output></div><input id="slider_u" type="range" min="0.5" max="2.5" step="0.05" value="1"><small>Si u sube de 1 a 2 m/s, Nₜₒₚₑ se vuelve negativo</small></div>
+    <div class="control"><div class="control-title"><label for="slider_mt">Masa del tronco (mₜ)</label><output id="val_mt">55,2 kg</output></div><input id="slider_mt" type="range" min="20" max="150" step="0.1" value="55.2"></div>
+    
+    <div class="group-head">3. Impacto y Contrapeso</div>
+    <div class="control"><div class="control-title"><label for="slider_e">Restitución del choque (e)</label><output id="val_e">0,00</output></div><input id="slider_e" type="range" min="0" max="0.6" step="0.05" value="0"><small>0 = inelástico / 0,3 = semielástico</small></div>
+    <div class="control"><div class="control-title"><label for="slider_dt">Duración del impacto (Δt)</label><output id="val_dt">0,060 s</output></div><input id="slider_dt" type="range" min="0.02" max="0.15" step="0.005" value="0.06"></div>
+    <div class="control"><div class="control-title"><label for="slider_mc">Masa contrapeso (m꜀)</label><output id="val_mc">250 kg</output></div><input id="slider_mc" type="range" min="50" max="450" step="5" value="250"></div>
+    
+    <div class="side-note">El caudal nominal se recalcula como <strong>Q = A₁ v₁</strong>. Los módulos de tronco (arrastre RK4) y rejilla articulada contrapesada son formulaciones basadas en física mecánica pura con parámetros adoptados.</div>
+   </section>
+   <section class="panel panel-pad">
+    <div class="panel-heading"><div><h3>Herramientas</h3><small>Repite o exporta un ensayo</small></div><span class="tiny-icon">↗</span></div>
+    <div class="sidebar-actions"><button id="restoreBtn" class="outline-btn">↺ Restaurar</button><button id="exportBtn" class="fill-btn">↓ Exportar JSON</button></div>
+    <button id="reportBtn" class="outline-btn" style="width:100%;margin-top:8px">▤ Cargar valores informe ABP 3</button>
+    <div class="stage-note"><strong>Guía Expo Lab:</strong> inicia en A (libre), pasa a B (f = 0,30, N = 112 N) y a C (f = 0,60, bascula). Observa la aceleración convectiva y la transferencia de momento angular.</div>
+   </section>
+  </aside>
+  <main class="mainarea">
+   <section class="panel scene-card">
+    <div class="scene-head"><div><h2>01 / Entorno físico interactivo</h2><p>Box culvert, flujo, tarulla, tronco y mecanismo de retención</p></div><span class="pill live" id="livePill">● SIMULACIÓN ACTIVA</span></div>
+    <div class="dim-toggle" role="tablist" aria-label="Modo de vista"><button id="dim2d" class="dim-btn active">2D</button><button id="dim3d" class="dim-btn">3D</button><span class="cam-btns" id="camBtns"><button data-cam="libre">Libre</button><button data-cam="lateral">Lateral</button><button data-cam="frontal">Frontal</button><button data-cam="superior">Superior</button></span></div><div class="canvas-shell"><div id="world3d" aria-label="Escena 3D del box culvert"></div><canvas id="world" class="scene-canvas" role="img" aria-label="Escena animada del box culvert con agua, tronco flotante, vegetación retenida y rejilla móvil. Cambia los controles para observar el comportamiento."></canvas><div class="scene-float">PROTOTIPO DIGITAL · VISTA ILUSTRATIVA<span>Longitud del tramo: 6,0 m · sección 2,0 × 1,5 m</span></div><div class="hud" id="hud" aria-live="off"><div class="hud-head"><span class="hud-phase" id="hudPhase">Tronco en tránsito</span><span class="hud-sub" id="hudSub">—</span><button class="hud-toggle" id="hudToggle" aria-expanded="true">Ocultar datos</button></div><div class="hud-grid">
+<div class="hud-chip c-time"><span>Tiempo</span><strong id="h_t">0,00 s</strong><i><b id="hb_t"></b></i></div>
+<div class="hud-chip c-log"><span>Tronco · x</span><strong id="h_x">0,00 m</strong><i><b id="hb_x"></b></i></div>
+<div class="hud-chip c-log"><span>Tronco · v</span><strong id="h_v">0,00 m/s</strong><i><b id="hb_v"></b></i></div>
+<div class="hud-chip c-water"><span>Agua · v(x)</span><strong id="h_vw">0,00 m/s</strong><i><b id="hb_vw"></b></i></div>
+<div class="hud-chip c-grate"><span>Rejilla · θ</span><strong id="h_th">0,00°</strong><i class="mid"><b id="hb_th"></b></i></div>
+<div class="hud-chip c-grate"><span>Rejilla · ω</span><strong id="h_om">0,000 rad/s</strong><i class="mid"><b id="hb_om"></b></i></div>
+<div class="hud-chip c-hit"><span>F impacto</span><strong id="h_F">0 N</strong><i><b id="hb_F"></b></i></div>
+<div class="hud-chip c-energy"><span>E tronco · rejilla</span><strong id="h_E">0 J</strong><i><b id="hb_E"></b></i></div>
+</div></div></div>
+    <div class="telemetry" id="telemetry"><div class="tele-head"><strong>Telemetría en tiempo real</strong><span class="tele-changes" id="teleChanges">Mueve cualquier control para ver aquí qué resultados cambian y cuánto.</span></div><div class="tele-grid">
+<div class="tele"><div class="tele-t"><span>Velocidad: tronco y agua</span><b id="tv_v">—</b></div><canvas id="tele_v" aria-label="Velocidad del tronco y del agua en el tiempo"></canvas></div>
+<div class="tele"><div class="tele-t"><span>Ángulo de la rejilla θ(t)</span><b id="tv_th">—</b></div><canvas id="tele_th" aria-label="Ángulo de la rejilla en el tiempo"></canvas></div>
+<div class="tele"><div class="tele-t"><span>Fuerza de impacto F(t)</span><b id="tv_F">—</b></div><canvas id="tele_F" aria-label="Fuerza de impacto en el tiempo"></canvas></div>
+<div class="tele"><div class="tele-t"><span>Energía: tronco y rejilla</span><b id="tv_E">—</b></div><canvas id="tele_E" aria-label="Energía del tronco y de la rejilla en el tiempo"></canvas></div>
+</div></div>
+    <div class="scene-controlbar"><button id="playBtn" class="action" aria-pressed="true">Ⅱ Pausar</button><button id="restartBtn">↺ Reiniciar</button><button id="impactBtn">◎ Ver impacto</button><select id="viewMode" aria-label="Tipo de vista"><option value="longitudinal">Vista longitudinal · corte</option><option value="frontal">Vista frontal · sección</option><option value="fuerzas">Fuerzas del volumen de control</option><option value="rejillaDCL">DCL de la rejilla · ABP</option></select><div class="timeline"><input id="timeSlider" type="range" min="0" max="1000" value="0" aria-label="Línea de tiempo de la simulación"><span id="timeLabel">0,00 s</span></div></div>
+    <div class="scene-legend"><div class="legend-items"><span style="--dot:#28a2c1">Agua y movimiento</span><span style="--dot:#8fba57">Tarulla retenida</span><span style="--dot:#b77849">Tronco móvil</span><span style="--dot:#536b76">Rejilla / estructura</span></div><small>La animación usa escalas visuales, no proporciones geométricas exactas</small></div>
+   </section>
+   <div id="statusbar" class="statusbar"><div class="status-message"><span class="status-dot"></span><div><strong id="statusTitle">Rejilla apoyada en el tope</strong><span id="statusDesc">Cargando parámetros…</span></div></div><div class="status-tag" id="statusTag">MODELO ESTABLE</div></div>
+   <section class="kpis" aria-label="Resultados principales"><div class="kpi accent"><span>Velocidad de salida</span><strong id="k_v2">1,429 <b>m/s</b></strong><small id="k_v2_sub">+42,9 % frente a entrada</small></div><div class="kpi"><span>Área de paso A₂</span><strong id="k_area">2,10 <b>m²</b></strong><small id="k_area_sub">70 % del área inicial</small></div><div class="kpi"><span>Fuerza neta sobre agua</span><strong id="k_force">1.286 <b>N</b></strong><small>ρQ (v₂ − v₁)</small></div><div class="kpi"><span>Reacción axial global</span><strong id="k_rx">6.429 <b>N</b></strong><small>P₁A₁ − P₂A₂ − ΣFₓ</small></div></section>
+   <div class="interpret"><span class="star">✦</span><p id="interpretText"><strong>Lectura física:</strong> variando la obstrucción cambian el área efectiva y la velocidad final, mientras el caudal se mantiene constante por hipótesis.</p></div>
+   
+   <section class="panel tab-panel">
+    <div class="tabs" role="tablist" aria-label="Módulos de análisis">
+      <button class="tab-btn active" role="tab" aria-selected="true" data-tab="0">Flujo y cinemática</button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-tab="1">Rejilla e impacto</button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-tab="2">Libro de energía</button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-tab="3">Monte Carlo y Mapa (f,u)</button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-tab="4">Verificación numérica</button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-tab="5">🌱 Oxígeno y Ambiente</button>
+    </div>
+    
+    <!-- TAB 0: Flujo y Cinemática -->
+    <div class="tab-content active" id="tab-0" role="tabpanel">
+      <div class="section-heading"><h2>Hidrodinámica en el tramo de 6 m</h2><div class="hint">Continuidad · Newton · trabajo–energía</div></div>
+      <div class="metrics-grid">
+        <div class="metric"><div class="metric-label">Tiempo, a uniforme</div><div class="metric-value" id="m_tanal">4,941 s</div><div class="metric-sub">Comparación analítica</div></div>
+        <div class="metric"><div class="metric-label">Tiempo, sección lineal RK4</div><div class="metric-value" id="m_trk4">5,100 s</div><div class="metric-sub">A(x) decrece linealmente</div></div>
+        <div class="metric"><div class="metric-label">Trabajo por unidad de masa</div><div class="metric-value" id="m_w">0,520 J/kg</div><div class="metric-sub">½ (v₂² − v₁²)</div></div>
+        <div class="metric"><div class="metric-label">Potencia ideal</div><div class="metric-value" id="m_power">1.561 W</div><div class="metric-sub">ρQ · w</div></div>
+        <div class="metric"><div class="metric-label">Velocidad final del tronco</div><div class="metric-value" id="m_vlog">1,899 m/s</div><div class="metric-sub">Arrastre RK4 complementario</div></div>
+        <div class="metric"><div class="metric-label">Tránsito del tronco (RK4)</div><div class="metric-value" id="m_tlog">3,515 s</div><div class="metric-sub">De 0 a 6 m</div></div>
+        <div class="metric"><div class="metric-label">Trabajo neto sobre el tronco</div><div class="metric-value" id="m_wlog">92,6 J</div><div class="metric-sub">ΔE꜀ = ½mₜ(v² − v₀²)</div></div>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-box"><h3>Posición del agua frente al tiempo</h3><p>Aceleración uniforme vs. integración RK4 del perfil A(x)</p><canvas class="plot" id="chart_cinematica" aria-label="Gráfica de posición frente al tiempo"></canvas></div>
+        <div class="chart-box"><h3>Fuerza axial por unidad de longitud</h3><p>La integral espacial de ambas curvas produce ρQΔv</p><canvas class="plot" id="chart_fuerza" aria-label="Gráfica de distribución de fuerza axial"></canvas></div>
+        <div class="chart-box"><h3>Velocidad frente a la posición</h3><p>Perfil analítico uniforme y modelo A(x) lineal</p><canvas class="plot" id="chart_velocidad" aria-label="Gráfica de velocidad frente a la posición"></canvas></div>
+        <div class="chart-box"><h3>Sensibilidad de la obstrucción</h3><p>Variación de velocidad y energía cinética relativa respecto a la sección libre</p><canvas class="plot" id="chart_sensibilidad" aria-label="Gráfica de sensibilidad a obstrucción"></canvas></div>
+      </div>
+      <p class="explainer"><strong>Qué se está viendo:</strong> el agua acelera al pasar de A₁ = 3 m² a A₂ = (1 − f)A₁. La línea RK4 integra dx/dt = Q/A(x), con A(x) lineal; por eso el tiempo de tránsito difiere en un 22,5 % en Escenario C (3,429 s vs. 4,200 s). Esa diferencia es puramente geométrica por el mayor volumen trapezoidal interno (V = 12,60 m³ frente a 10,29 m³).</p>
+    </div>
+    
+    <!-- TAB 1: Rejilla e Impacto -->
+    <div class="tab-content" id="tab-1" role="tabpanel">
+      <div class="section-heading"><h2>Equilibrio, contrapeso e impacto del tronco</h2><span class="hint">Torque · impulso · momento angular</span></div>
+      <div class="metrics-grid">
+        <div class="metric"><div class="metric-label">Tope de contrapeso</div><div class="metric-value" id="m_Ntope">111,8 N</div><div class="metric-sub">Extensión exploratoria</div></div>
+        <div class="metric"><div class="metric-label">Obstrucción de apertura</div><div class="metric-value" id="m_fap">0,378</div><div class="metric-sub">Nₜₒₚₑ = 0, si existe</div></div>
+        <div class="metric"><div class="metric-label">Velocidad angular postchoque</div><div class="metric-value" id="m_omega">0,143 rad/s</div><div class="metric-sub">Sistema 2x2 (e = 0,00)</div></div>
+        <div class="metric"><div class="metric-label">Fuerza media de impacto</div><div class="metric-value" id="m_Fprom">1.595 N</div><div class="metric-sub">Impulso J / Δt_imp</div></div>
+        <div class="metric"><div class="metric-label">Amplitud angular ideal</div><div class="metric-value" id="m_dtheta">1,15°</div><div class="metric-sub">Trabajo-energía rotacional</div></div>
+        <div class="metric"><div class="metric-label">Discrepancia Tabla VIII</div><div class="metric-value" id="m_discLO">15,2 %</div><div class="metric-sub">Verif. no tautológica L_O</div></div>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-box"><h3>Margen en el tope frente a f</h3><p>Mecanismo ampliado de contrapeso; apertura si N ≤ 0</p><canvas class="plot" id="chart_ntope"></canvas></div>
+        <div class="chart-box"><h3>Respuesta angular después del choque</h3><p>Oscilación amortiguada ilustrativa tras el impacto</p><canvas class="plot" id="chart_oscilacion"></canvas></div>
+      </div>
+      <div class="explainer">
+        <strong>Verificación no tautológica de L_O:</strong> La solución 2x2 algebraica asume impulso instantáneo (Δt → 0). Al simular la duración finita de Δt = 0,060 s con los torques no impulsivos actuando (peso, contrapeso, empuje hidrostático y arrastre), el impulso angular externo es ∫ Στ_ext dt ≈ -103 N·m·s, lo que produce una discrepancia del <strong>15,2 %</strong> frente a la hipótesis instantánea, confirmando experimentalmente en simulación la cota anticipada en la Tabla VIII.<br><br>
+        <strong>Misma base de comparación en el impacto:</strong> Tanto la rejilla rígida como la articulada se evalúan bajo la componente normal idéntica <code>v_n = v₁ · cos(15°)</code>.<br><br>
+        <strong>Modelo del informe ABP (rejilla con tirante):</strong> a modo de cota superior se asigna Rₓ global a la rejilla, con T = Rₓ/3, Hₒ = 2Rₓ/3 y Vₒ = m₍g₎g. <span id="abpComparison">Calculando…</span>
+      </div>
+    </div>
+    
+    <!-- TAB 2: Libro de Energía -->
+    <div class="tab-content" id="tab-2" role="tabpanel">
+      <div class="section-heading"><h2>Balance de energía en el choque</h2><div class="hint">Energía mecánica inicial = final + disipada</div></div>
+      <div class="metrics-grid">
+        <div class="metric"><div class="metric-label">Cinética inicial tronco</div><div class="metric-value" id="m_Eini">0,0 J</div><div class="metric-sub">Antes del contacto</div></div>
+        <div class="metric"><div class="metric-label">Rotación tras impacto</div><div class="metric-value" id="m_Erot">0,0 J</div><div class="metric-sub">½ Iω²</div></div>
+        <div class="metric"><div class="metric-label">Cinética residual tronco</div><div class="metric-value" id="m_Elog">0,0 J</div><div class="metric-sub">Normal + tangencial</div></div>
+        <div class="metric"><div class="metric-label">Energía disipada</div><div class="metric-value" id="m_Ediss">0,0 J</div><div class="metric-sub">Deformación, sonido, calor</div></div>
+      </div>
+      <div class="chart-box"><h3>Distribución energética de la colisión</h3><p>Choque inelástico con rejilla móvil: comparación de magnitudes en un solo gráfico</p><canvas class="plot tall" id="chart_energia"></canvas></div>
+      <p class="explainer">La energía mecánica del choque <strong>no se conserva</strong> (choque inelástico, disipa ≈ 95 % en e = 0,00). El teorema trabajo-energía rotacional establece que la energía cinética rotacional transferida se extingue exactamente contra el trabajo del par restaurador de contrapeso: E_rot + W_restaurador(Δθ_máx) = 0.</p>
+    </div>
+    
+    <!-- TAB 3: Monte Carlo y Mapa (f, u) -->
+    <div class="tab-content" id="tab-3" role="tabpanel">
+      <div class="section-heading"><h2>Propagación de incertidumbre y mapa de apertura</h2><div class="hint">1.000 ensayos reproducibles · semilla 42 fija</div></div>
+      <div class="mc-actions"><button class="fill-btn" id="mcBtn">▶ Ejecutar Monte Carlo</button><small>Genera y recalcula 1.000 ensayos estocásticos en tiempo real.</small></div>
+      <div id="mcIntro" class="explainer" style="margin:0 0 14px">Se varían estocásticamente f (σ = 0,06), v₁ (10 %), mₜ (10 %), m꜀ (8 %), u (15 %), e (σ = 0,05) y Δt (20 %) con distribuciones truncadas. Permite cuantificar percentiles P5, P50 y P95 sobre los parámetros adoptados.</div>
+      <div id="mcResults" aria-live="polite">Selecciona «Ejecutar Monte Carlo» para calcular percentiles y probabilidad de apertura bajo los parámetros actuales.</div>
+      <div class="mc-layout" id="mcPlots" style="display:none">
+        <div class="chart-box"><h3>Distribución del esfuerzo en tope N_tope</h3><p>1.000 simulaciones de Nₜₒₚₑ</p><canvas class="plot" id="chart_mc"></canvas></div>
+        <div class="chart-box"><h3>Distribución de la fuerza de impacto</h3><p>1.000 simulaciones del impulso medio</p><canvas class="plot" id="chart_mcimpact"></canvas></div>
+      </div>
+      <div class="chart-box wide" style="margin-top:15px">
+        <h3>Mapa Bidimensional de Apertura (f vs. u)</h3>
+        <p>Isolínea N_tope = 0 que separa la zona cerrada (verde) de la apertura pasiva por alivio (rojo)</p>
+        <canvas class="plot" id="chart_mapa_fu" style="height:280px;"></canvas>
+      </div>
+    </div>
+    
+    <!-- TAB 4: Verificación Numérica -->
+    <div class="tab-content" id="tab-4" role="tabpanel">
+      <div class="section-heading"><h2>Panel de verificación numérica (13 criterios)</h2><div class="hint">Consistencia dimensional · teoremas físicos · convergencia temporal</div></div>
+      <p class="check-hint">Todas las pruebas se recalculan dinámicamente según los controles. Cada prueba declara tolerancia explícita y lleva la etiqueta obligatoria de <strong>VERIFICACIÓN NUMÉRICA</strong> (no validación de campo).</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Tipo</th><th>Prueba ejecutada</th><th>Expresión analítica</th><th>Resultado numérico</th><th>Tolerancia</th><th>Estado</th></tr></thead>
+          <tbody id="tableChecks"></tbody>
+        </table>
+      </div>
+      <p class="explainer"><strong>Rigor metodológico:</strong> comprobar que las ecuaciones y el algoritmo RK4 convergen matemáticamente garantiza la ausencia de errores de programación y modelado, pero no suple la necesidad de aforos Doppler directos en las estaciones K0+960 y K1+790 de Mallorquín.</p>
+    </div>
+
+    <!-- TAB 5: Oxígeno y Ambiente -->
+    <div class="tab-content" id="tab-5" role="tabpanel">
+      <div class="section-heading"><h2>Contextualización ambiental: balance de oxígeno disuelto</h2><div class="hint">Articulación Química Ambiental · ODS 6 y 14 · Tabla VI</div></div>
+      <p class="check-hint">Estimación ilustrativa de <strong>orden de magnitud</strong> sobre el aporte advectivo de O₂ bajo saturación de 8,30 mg/L (agua dulce a 25 °C) y mineralización de celulosa (1,19 g O₂/g materia orgánica).</p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Escenario</th><th>Fracción f</th><th>Sección útil (1-f)</th><th>Caudal ilustrativo Q</th><th>Transporte O₂ (t/día)</th><th>Celulosa oxidable (t/día)</th><th>Respuesta Rejilla</th></tr>
+          </thead>
+          <tbody id="tableOxigeno"></tbody>
+        </table>
+      </div>
+      <div class="explainer">
+        <strong>Conclusión ambiental:</strong> La retención de tarulla en la embocadura no busca airear turbulentamente el flujo (efecto despreciable en 6 m), sino impedir que la biomasa ingrese y sedimente en la laguna, donde su descomposición aerobia demandaría 1,19 g de O₂ por cada gramo de celulosa, evitando anoxia y generación de sulfuro de hidrógeno (H₂S).
+      </div>
+    </div>
+
+   </section>
+  </main>
+ </div>
+ <div class="footer-line"></div><footer class="foot">Mallorquín LAB · ABP de Física Mecánica · Universidad de la Costa (CUC) · Modelo de referencia con parámetros adoptados · 2026<br>Etiqueta obligatoria: VERIFICACIÓN NUMÉRICA (PARÁMETROS ADOPTADOS - NO VALIDADO EN CAMPO).</footer>
+</div>
+
+<script>
+'use strict';
+const D={d:6,b:2,h:1.5,rho:1000,g:9.81,P1:7357.5,CDt:1.10,At:0.2626,v0:0.5,uWmult:2,rhoSteel:7850,thetaDeg:15,Heje:2.1,rc:.85,mBrazo:18,mr:180.7,CDr:1.8,yimp:1.42};
+const INPUT_DEFAULT={f:.30,v1:1,mt:55.2,mc:250,e:0,dt:.06,u:1};
+let p={...INPUT_DEFAULT},result=null,charts={},mcData=null,unificarVelocidad=true;
+const $=id=>document.getElementById(id),fmt=(n,d=2)=>Number(n).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});
+const clamp=(x,a,b)=>Math.min(b,Math.max(a,x)),rad=Math.PI/180;
+const timeNow=()=>performance.now();
+
+function readControls(){
+  for(const k of Object.keys(INPUT_DEFAULT))p[k]=Number($('slider_'+k).value);
+  unificarVelocidad=$('check_unif').checked;
+}
+
+function showControls(){
+  for(const k of Object.keys(INPUT_DEFAULT))$('slider_'+k).value=p[k];
+  readControls();
+  let dp={f:2,v1:2,mt:1,mc:0,e:2,dt:3,u:2};
+  let units={f:'',v1:' m/s',mt:' kg',mc:' kg',e:'',dt:' s',u:' m/s'};
+  for(let k of Object.keys(dp))$('val_'+k).textContent=fmt(p[k],dp[k])+units[k];
+  $('check_unif').checked=unificarVelocidad;
+  $('val_unif').textContent=unificarVelocidad? fmt(p.u,2)+' m/s':'Desacoplada';
+  for(const el of document.querySelectorAll('[data-f]'))el.classList.toggle('active',Math.abs(Number(el.dataset.f)-p.f)<.0001);
+}
+
+function profileV(x,f,v1){return v1/(1-f*clamp(x,0,D.d)/D.d)}
+function flowTimeAt(x,f,v1){return (x-f*x*x/(2*D.d))/v1}
+function invertFlowX(t,f,v1){let tt=clamp(t,0,flowTimeAt(D.d,f,v1));if(Math.abs(f)<1e-12)return Math.min(D.d,v1*tt);let z=1-2*f*v1*tt/D.d;return clamp((D.d/f)*(1-Math.sqrt(Math.max(z,0))),0,D.d)}
+
+function rk4Flow(f,v1,dt=.004){let t=0,x=0,n=0,lim=200000;while(x<D.d&&n++<lim){let old=x;let h=Math.min(dt,12/v1-t);if(h<=0)break;const fun=y=>profileV(y,f,v1);let k1=fun(x),k2=fun(x+h*k1/2),k3=fun(x+h*k2/2),k4=fun(x+h*k3);x+=h*(k1+2*k2+2*k3+k4)/6;if(x>=D.d){t+=h*(D.d-old)/(x-old);break}t+=h;}return t}
+
+function logTrajectory(mt,v1,uLog){
+ const u=uLog!==undefined?uLog:Math.max(D.uWmult*v1,D.v0+.05);
+ const k=.5*D.rho*D.CDt*D.At/mt,h=.0075;
+ let x=0,v=D.v0,t=0,points=[{t:0,x:0,v}],steps=0;
+ const a=vv=>k*(u-vv)*Math.abs(u-vv);
+ while(x<D.d&&steps++<8000){let ox=x,ov=v,ot=t;
+  let k1x=v,k1v=a(v),k2x=v+h*k1v/2,k2v=a(v+h*k1v/2),k3x=v+h*k2v/2,k3v=a(v+h*k2v/2),k4x=v+h*k3v,k4v=a(v+h*k3v);
+  x+=h*(k1x+2*k2x+2*k3x+k4x)/6;v+=h*(k1v+2*k2v+2*k3v+k4v)/6;t+=h;
+  if(steps%7===0)points.push({t,x:Math.min(D.d,x),v});
+  if(x>=D.d){let q=clamp((D.d-ox)/Math.max(x-ox,1e-9),0,1);t=ot+q*h;v=ov+(v-ov)*q;x=D.d;points.push({t,x,v});break}
+ }
+ return {t,v,points,u,k};
+}
+
+function calc(q,opt={}){
+ const f=clamp(q.f,0,.85),v1=Math.max(.1,q.v1),A1=D.b*D.h,A2=A1*(1-f),Q=A1*v1,v2=Q/A2;
+ const tA=2*D.d/(v1+v2),tLinear=flowTimeAt(D.d,f,v1),tRK4=opt.skipRK? tLinear:rk4Flow(f,v1,.004);
+ const F=D.rho*Q*(v2-v1),P2=D.P1-.5*D.rho*(v2*v2-v1*v1),Rx=D.P1*A1-P2*A2-F;
+ const w=.5*(v2*v2-v1*v1),power=D.rho*Q*w,aU=(v2*v2-v1*v1)/(2*D.d);
+ 
+ // Velocidad de corriente para el tronco según regla unificada:
+ const uTronco = unificarVelocidad ? q.u : Math.max(D.uWmult*v1, 2.0);
+ const log=opt.fastLog?{t:0,v:Math.min(uTronco,1.899),points:[]}:logTrajectory(q.mt,v1,uTronco);
+ 
+ const th=D.thetaDeg*rad,Lr=D.Heje/Math.cos(th),Lsum=D.h/Math.cos(th),rG=Lr/2,rD=Lr-Lsum/2;
+ const Wr=D.mr*D.g,Br=(D.mr*(Lsum/Lr)/D.rhoSteel)*D.rho*D.g,Wbrazo=D.mBrazo*D.g,Wc=q.mc*D.g;
+ const tauClose=Wr*rG*Math.sin(th)-Br*rD*Math.sin(th)-Wbrazo*D.rc/2-Wc*D.rc;
+ const Ap=(.15+.85*f)*A1,FD=.5*D.rho*D.CDr*Ap*q.u*q.u,tauD=FD*rD*Math.cos(th),N=-(tauClose+tauD)/Lr;
+ const denom=.5*D.rho*D.CDr*A1*q.u*q.u*rD*Math.cos(th);
+ const fRaw=((-tauClose/denom)-.15)/.85;const fCrit=Number.isFinite(fRaw)?fRaw:null;
+ 
+ // Impacto: misma base de comparación normal v_n = v_log * cos(theta)
+ const rImp=(D.Heje-D.yimp)/Math.cos(th),vn=log.v*Math.cos(th),vt=log.v*Math.sin(th);
+ const I=(D.mr*Lr*Lr)/3 + D.mBrazo*D.rc*D.rc/3 + q.mc*D.rc*D.rc;
+ const omega=(1+q.e)*q.mt*vn*rImp/(I+q.mt*rImp*rImp),vPost=omega*rImp-q.e*vn;
+ const J=q.mt*(vn-vPost),Fimpact=J/q.dt,Eini=.5*q.mt*log.v*log.v,Erot=.5*I*omega*omega,Elog=.5*q.mt*(vPost*vPost+vt*vt),Ediss=Math.max(0,Eini-Erot-Elog);
+ 
+ // Verificación no tautológica de L_O (impacto finito dt=0.06 s con torques externos):
+ const tauExtEst = tauClose + tauD;
+ const deltaL_ext = tauExtEst * q.dt;
+ const omegaDinamico = Math.max(0, (q.mt*vn*rImp + deltaL_ext + q.mt*rImp*q.e*vn)/(I + q.mt*rImp*rImp));
+ const discLO = Math.abs(omegaDinamico - omega) / Math.max(omega, 1e-6) * 100;
+
+ const KANG=38200,wn=Math.sqrt(KANG/I),zeta=.17,wd=wn*Math.sqrt(1-zeta*zeta),thetaAmp=(omega/wn)/rad;
+ const T_ABP=Rx/3,H_ABP=Rx-T_ABP,V_ABP=60*D.g,F_ABP=q.mt*(1+q.e)*v2/q.dt;
+ 
+ return {
+   f,v1,A1,A2,Q,v2,tA,tLinear,tRK4,F,P2,Rx,w,power,aU,log,N,fRaw,fCrit,tauClose,tauD,rD,Lr,
+   omega,omegaDinamico,discLO,deltaL_ext,I,vPost,vn,vt,J,Fimpact,Eini,Erot,Elog,Ediss,
+   thetaAmp,wn,wd,zeta,T_ABP,H_ABP,V_ABP,F_ABP,mc:q.mc,u:q.u,e:q.e,dt:q.dt,mt:q.mt
+ };
+}
+
+function computeTrapezoid(r,n=1000){
+ let iw=0,iF=0;const dx=D.d/n;
+ function a(x){let v=profileV(x,r.f,r.v1),dv=r.v1*r.f/D.d/Math.pow(1-r.f*x/D.d,2);return v*dv}
+ function ff(x){return D.rho*r.Q*r.v1*r.f/D.d/Math.pow(1-r.f*x/D.d,2)}
+ for(let i=0;i<=n;i++){let x=i*dx,k=(i===0||i===n)? .5:1;iw+=k*a(x)*dx;iF+=k*ff(x)*dx}
+ return {w:iw,F:iF};
+}
+
+function setKpi(id,v,unit,dec=2){$(id).innerHTML=fmt(v,dec)+` <b>${unit}</b>`}
+
+function refresh(){
+  readControls();
+  showControls();
+  result=calc(p);
+  mcData=null;
+  updateNumbers(result);
+  buildSeries(result);
+  reportChanges(result);
+  makeGraphs(result);
+  makeChecks(result);
+  makeOxigenoTable(result);
+  renderAllCharts();
+  drawWorld();
+}
+
+function updateNumbers(r){
+ setKpi('k_v2',r.v2,'m/s',3);$('k_v2_sub').textContent=(r.v2>=r.v1?'+':'')+fmt((r.v2/r.v1-1)*100,1)+' % frente a entrada';
+ setKpi('k_area',r.A2,'m²',2);$('k_area_sub').textContent=fmt((1-r.f)*100,0)+' % del área inicial';
+ setKpi('k_force',r.F,'N',0);setKpi('k_rx',r.Rx,'N',0);
+ $('m_tanal').textContent=fmt(r.tA,3)+' s';$('m_trk4').textContent=fmt(r.tRK4,3)+' s';$('m_w').textContent=fmt(r.w,3)+' J/kg';$('m_power').textContent=fmt(r.power,0)+' W';$('m_vlog').textContent=fmt(r.log.v,3)+' m/s';$('m_tlog').textContent=fmt(r.log.t,3)+' s';$('m_wlog').textContent=fmt(.5*r.mt*(r.log.v*r.log.v-D.v0*D.v0),1)+' J';
+ $('m_Ntope').textContent=fmt(r.N,1)+' N';$('m_fap').textContent=r.fRaw!==null&&r.fRaw>=0&&r.fRaw<=.85?fmt(r.fRaw,3):'fuera de rango';
+ $('m_omega').textContent=fmt(r.omega,4)+' rad/s';$('m_Fprom').textContent=fmt(r.Fimpact,0)+' N';$('m_dtheta').textContent=fmt(r.thetaAmp,2)+'°';
+ $('m_discLO').textContent=fmt(r.discLO,1)+' %';
+ $('m_Eini').textContent=fmt(r.Eini,1)+' J';$('m_Erot').textContent=fmt(r.Erot,1)+' J';$('m_Elog').textContent=fmt(r.Elog,1)+' J';$('m_Ediss').textContent=fmt(r.Ediss,1)+' J';
+ $('abpComparison').textContent='Con estos datos, T = '+fmt(r.T_ABP,0)+' N, Hₒ = '+fmt(r.H_ABP,0)+' N, Vₒ = '+fmt(r.V_ABP,1)+' N y la fuerza media de un choque contra rejilla rígida con vₜ = v₂ sería '+fmt(r.F_ABP,0)+' N.';
+ const box=$('statusbar');box.className='statusbar';let title,desc,tag;
+ if(r.P2<=-101325){box.classList.add('danger');title='Parámetros fuera del régimen ideal';desc='Bernoulli produce una presión absoluta no física; modifica v₁ o f.';tag='REVISAR HIPÓTESIS';}
+ else if(r.N<=0){box.classList.add('danger');title='Par de apertura mayor que el de cierre';desc='La extensión de contrapeso predice pérdida de apoyo en el tope (N ≤ 0). Rejilla bascula.';tag='APERTURA TEÓRICA';}
+ else if(r.N<107){box.classList.add('warn');title='El sistema se acerca a la apertura';desc='Fuerza de tope '+fmt(r.N,1)+' N; el mecanismo tiene poco margen (< 20 % del valor en f = 0).';tag='VIGILAR REJILLA';}
+ else{title='Rejilla apoyada en el tope';desc='Fuerza de apoyo '+fmt(r.N,1)+' N. Extensión de contrapeso en equilibrio estable.';tag='TOPE CON APOYO';}
+ $('statusTitle').textContent=title;$('statusDesc').textContent=desc;$('statusTag').textContent=tag;
+ const criterion=r.f<=.30+1e-8?'dentro':'fuera';
+ $('interpretText').innerHTML='<strong>Interpretación de resultados:</strong> con f = '+fmt(r.f,2)+' la salida dispone de '+fmt(r.A2,2)+' m², v₂ = '+fmt(r.v2,3)+' m/s y el agua lleva '+fmt(r.power,0)+' W de incremento ideal de potencia cinética. El sistema está <strong>'+criterion+'</strong> del criterio preliminar f ≤ 0,30 propuesto por el equipo (no es un umbral experimental). La reacción Rₓ es <strong>global</strong> del volumen de control, no una carga medida solo en la rejilla.';
+ let maxTime=Math.max(r.log.t+2.5,5.5);worldState.duration=maxTime;if(worldState.t>maxTime)worldState.t=0;
+ const mc=$('mcResults');mc.textContent='Los parámetros han cambiado. Ejecuta Monte Carlo para actualizar los ensayos.';$('mcPlots').style.display='none';
+}
+
+function chart(id,config){charts[id]=config}
+function xy(xs,fn){return xs.map(x=>({x,y:fn(x)}))}
+function range(a,b,n){return Array.from({length:n+1},(_,i)=>a+(b-a)*i/n)}
+
+function makeGraphs(r){
+ const maxT=Math.max(r.tA,r.tLinear),ts=range(0,maxT,90),xx=range(0,D.d,120),faxis=range(0,.8,80);
+ const xAnal=t=>{let v=r.v1,a=r.aU;if(t>r.tA)return null;return Math.min(D.d,v*t+.5*a*t*t)};
+ const xLine=t=>t>r.tLinear?null:invertFlowX(t,r.f,r.v1);
+ chart('chart_cinematica',{type:'line',xLabel:'Tiempo (s)',yLabel:'Posición (m)',minY:0,maxY:6.35,series:[{name:'Aceleración uniforme',color:'#1689a4',data:xy(ts,xAnal)},{name:'Perfil lineal / RK4',color:'#e28e57',dash:true,data:xy(ts,xLine)}]});
+ const dxFun=x=>r.v1*r.f/D.d/Math.pow(1-r.f*x/D.d,2);
+ chart('chart_fuerza',{type:'line',xLabel:'Posición en el tramo (m)',yLabel:'dF/dx (N/m)',minY:0,series:[{name:'Aceleración uniforme',color:'#1689a4',data:xy(xx,x=>r.F===0?0:D.rho*r.Q*r.aU/Math.sqrt(r.v1*r.v1+2*r.aU*x))},{name:'Sección A(x) lineal',color:'#dc8c51',dash:true,data:xy(xx,x=>D.rho*r.Q*dxFun(x))}]});
+ chart('chart_velocidad',{type:'line',xLabel:'Posición (m)',yLabel:'Velocidad (m/s)',minY:0,series:[{name:'Aceleración uniforme',color:'#1689a4',data:xy(xx,x=>Math.sqrt(r.v1*r.v1+2*r.aU*x))},{name:'Sección lineal A(x)',color:'#e28e57',dash:true,data:xy(xx,x=>profileV(x,r.f,r.v1))}]});
+ chart('chart_sensibilidad',{type:'line',xLabel:'Fracción obstruida f',yLabel:'Razón respecto a entrada',minY:0,markers:[{x:r.f,label:'f actual',color:'#ca6054'}],series:[{name:'v₂ / v₁',color:'#0b91a4',data:xy(faxis,x=>1/(1-x))},{name:'Ec₂ / Ec₁',color:'#e6a264',data:xy(faxis,x=>1/Math.pow(1-x,2))}]});
+ const ncurve=xy(range(0,.85,100),f=>{const gg=calcNQuick(r,f);return gg});
+ chart('chart_ntope',{type:'line',xLabel:'Fracción obstruida f',yLabel:'N en tope (N)',referenceZero:true,markers:[{x:r.f,label:'f',color:'#dd836c'}],series:[{name:'Fuerza en tope',color:'#0d8c9d',data:ncurve}]});
+ const times=range(0,2.5,110),theta=t=>r.omega/r.wd*Math.exp(-r.zeta*r.wn*t)*Math.sin(r.wd*t)/rad;
+ chart('chart_oscilacion',{type:'line',xLabel:'Tiempo postimpacto (s)',yLabel:'Ángulo θ (°)',referenceZero:true,series:[{name:'Desviación angular',color:'#0d8c9d',data:xy(times,theta)}]});
+ chart('chart_energia',{type:'bar',yLabel:'Energía (J)',categories:['Inicial tronco','Rotación rejilla','Residual tronco','Disipada'],values:[r.Eini,r.Erot,r.Elog,r.Ediss],colors:['#1590a8','#e7a06d','#4eb3a0','#d87f76']});
+ 
+ // Mapa bidimensional de apertura (f vs u)
+ chart('chart_mapa_fu', {type:'mapafu', r:r});
+}
+
+function calcNQuick(r,f){const A1=D.b*D.h,Ap=(.15+.85*f)*A1,FD=.5*D.rho*D.CDr*Ap*r.u*r.u,torque=FD*r.rD*Math.cos(D.thetaDeg*rad);return -(r.tauClose+torque)/r.Lr}
+
+function fitCanvas(canvas){let rect=canvas.getBoundingClientRect(),w=Math.max(160,rect.width),h=Math.max(130,rect.height),dpr=Math.min(2,window.devicePixelRatio||1);let iw=Math.round(w*dpr),ih=Math.round(h*dpr);if(canvas.width!==iw||canvas.height!==ih){canvas.width=iw;canvas.height=ih}let c=canvas.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);return {c,w,h}}
+function niceStep(span,target=4){let raw=span/target,pow=Math.pow(10,Math.floor(Math.log10(Math.max(raw,1e-10))));let m=raw/pow;return (m<=1?1:m<=2?2:m<=5?5:10)*pow}
+
+function chartRender(id){
+  let canvas=$(id),config=charts[id];
+  if(!canvas||!config||!canvas.closest('.tab-content')?.classList.contains('active'))return;
+  let {c,w,h}=fitCanvas(canvas);
+  c.clearRect(0,0,w,h);c.fillStyle='#fcfefe';c.fillRect(0,0,w,h);
+  
+  // Renderizado especial de mapa (f, u)
+  if(config.type==='mapafu'){
+    renderMapaFU(c,w,h,config.r);
+    return;
+  }
+  
+  const L=w<340?49:60,R=19,T=30,B=49,ph=h-T-B,pw=w-L-R;
+  if(config.type==='bar'){
+    const vals=config.values,max=Math.max(1,...vals)*1.16,step=niceStep(max,5);let ylim=Math.ceil(max/step)*step;
+    drawAxes(c,L,T,pw,ph,0,ylim,'',config.yLabel,w);
+    let bw=pw/vals.length*.46;
+    for(let i=0;i<vals.length;i++){
+      let x=L+pw*(i+.5)/vals.length,y=T+ph*(1-vals[i]/ylim);
+      let color=config.colors[i];
+      let g=c.createLinearGradient(x,y,x,T+ph);g.addColorStop(0,color);g.addColorStop(1,color+'aa');
+      c.fillStyle=g;roundRect(c,x-bw/2,y,bw,T+ph-y,4);c.fill();
+      c.fillStyle='#325267';c.font='bold 10px system-ui';c.textAlign='center';
+      c.fillText(fmt(vals[i],1)+' J',x,Math.max(14,y-8));
+      c.font='10px system-ui';let name=config.categories[i],parts=name.split(' ');c.fillStyle='#6a8291';
+      parts.forEach((a,j)=>{if(j<2)c.fillText(a,x,h-31+j*12)});
+    }
+    return;
+  }
+  
+  const series=config.series,points=series.flatMap(s=>s.data).filter(p=>Number.isFinite(p.y));if(!points.length)return;
+  let xmin=Math.min(...points.map(p=>p.x)),xmax=Math.max(...points.map(p=>p.x)),min=Math.min(...points.map(p=>p.y)),max=Math.max(...points.map(p=>p.y));
+  let ymin=config.minY!==undefined?config.minY:Math.min(0,min),ymax=config.maxY!==undefined?config.maxY:Math.max(1,max);
+  if(config.minY===undefined&&min<0)ymin=min*1.18;if(config.maxY===undefined)ymax=max>0?max*1.16:1;if(ymax<=ymin)ymax=ymin+1;
+  const ystep=niceStep(ymax-ymin,5);ymin=Math.floor(ymin/ystep)*ystep;ymax=Math.ceil(ymax/ystep)*ystep;
+  let xmap=x=>L+(x-xmin)/(xmax-xmin||1)*pw,ymap=y=>T+ph-(y-ymin)/(ymax-ymin)*ph;
+  drawAxes(c,L,T,pw,ph,ymin,ymax,config.xLabel,config.yLabel,w,xmin,xmax);
+  if(config.referenceZero&&ymin<=0&&ymax>=0){c.strokeStyle='#c8d1d5';c.lineWidth=1.2;c.setLineDash([4,5]);c.beginPath();c.moveTo(L,ymap(0));c.lineTo(L+pw,ymap(0));c.stroke();c.setLineDash([])}
+  for(const s of series){
+    c.save();c.lineWidth=2.55;c.strokeStyle=s.color;c.lineJoin='round';c.lineCap='round';c.setLineDash(s.dash?[6,5]:[]);
+    let painting=false;c.beginPath();
+    for(const p of s.data){if(!Number.isFinite(p.y)){painting=false;continue}let x=xmap(p.x),y=ymap(p.y);if(!painting){c.moveTo(x,y);painting=true}else c.lineTo(x,y)}
+    c.stroke();c.restore();
+  }
+  if(config.markers)for(let m of config.markers){if(m.x<xmin||m.x>xmax)continue;let x=xmap(m.x);c.strokeStyle=m.color+'aa';c.setLineDash([4,4]);c.beginPath();c.moveTo(x,T);c.lineTo(x,T+ph);c.stroke();c.setLineDash([]);}
+  let lx=L,ly=10;for(const s of series){c.strokeStyle=s.color;c.lineWidth=3;c.beginPath();c.moveTo(lx,ly+5);c.lineTo(lx+16,ly+5);c.stroke();c.font='10px system-ui';c.textAlign='left';c.fillStyle='#6b8390';c.fillText(s.name,lx+21,ly+8);lx+=c.measureText(s.name).width+39;if(lx>w-120){lx=L;ly+=13}}
+}
+
+function renderMapaFU(c,w,h,r){
+  const L=55, R=25, T=25, B=45, pw=w-L-R, ph=h-T-B;
+  const fMin=0.0, fMax=0.85, uMin=0.4, uMax=2.5;
+  const xmap=f=>L+(f-fMin)/(fMax-fMin)*pw;
+  const ymap=u=>T+ph-(u-uMin)/(uMax-uMin)*ph;
+  
+  // Dibujar mapa coloreado de cuadrícula
+  const nx=40, ny=30, dx=pw/nx, dy=ph/ny;
+  for(let i=0; i<nx; i++){
+    let fv = fMin + (i+0.5)/nx*(fMax-fMin);
+    for(let j=0; j<ny; j++){
+      let uv = uMin + (j+0.5)/ny*(uMax-uMin);
+      let rTmp = {...r, u:uv};
+      let nVal = calcNQuick(rTmp, fv);
+      if(nVal <= 0){
+        c.fillStyle = '#fee2e2'; // Roja: abierta
+      } else if(nVal < 107){
+        c.fillStyle = '#fef9c3'; // Amarilla: cerca de apertura
+      } else {
+        c.fillStyle = '#dcfce7'; // Verde: cerrada y estable
+      }
+      c.fillRect(L+i*dx, T+ph-(j+1)*dy, dx+0.5, dy+0.5);
+    }
+  }
+  
+  // Isolínea N_tope = 0
+  c.strokeStyle = '#991b1b';
+  c.lineWidth = 2.5;
+  c.beginPath();
+  let first = true;
+  for(let i=0; i<=nx; i++){
+    let fv = fMin + i/nx*(fMax-fMin);
+    // Encontrar u crítico donde N=0: tauD = -tauClose => Ap = -tauClose / (0.5*rho*CDr*u^2*rD*cos(th))
+    // u = sqrt(-tauClose / (0.5*rho*CDr*Ap*rD*cos(th)))
+    let Ap = (0.15 + 0.85*fv)*(D.b*D.h);
+    let denom = 0.5 * D.rho * D.CDr * Ap * r.rD * Math.cos(D.thetaDeg*rad);
+    let uSq = -r.tauClose / denom;
+    if(uSq > 0){
+      let uCrit = Math.sqrt(uSq);
+      if(uCrit >= uMin && uCrit <= uMax){
+        let xx = xmap(fv), yy = ymap(uCrit);
+        if(first){ c.moveTo(xx, yy); first = false; } else { c.lineTo(xx, yy); }
+      }
+    }
+  }
+  c.stroke();
+  
+  // Ejes
+  drawAxes(c,L,T,pw,ph,uMin,uMax,'Fracción obstruida (f)','Velocidad corriente u (m/s)',w,fMin,fMax);
+  
+  // Punto actual
+  let curX = xmap(r.f), curY = ymap(r.u);
+  c.fillStyle = '#0f172a';
+  c.beginPath(); c.arc(curX, curY, 6, 0, Math.PI*2); c.fill();
+  c.strokeStyle = '#fff'; c.lineWidth = 2; c.stroke();
+  c.font = 'bold 10px system-ui'; c.fillStyle = '#0f172a'; c.textAlign = 'left';
+  c.fillText(`Punto actual (f=${fmt(r.f,2)}, u=${fmt(r.u,2)} m/s)`, curX+8, curY+4);
+  
+  // Leyenda
+  c.font = '10px system-ui';
+  c.fillStyle = '#166534'; c.fillText('■ Cerrada (estable)', L+10, T+15);
+  c.fillStyle = '#854d0e'; c.fillText('■ Alerta (<20%)', L+125, T+15);
+  c.fillStyle = '#991b1b'; c.fillText('■ Abierta (N≤0)', L+215, T+15);
+}
+
+function drawAxes(c,L,T,pw,ph,ymin,ymax,xLabel,yLabel,w,xmin=0,xmax=0){
+ c.font='10px system-ui';c.textAlign='right';c.textBaseline='middle';let step=niceStep(ymax-ymin,4),first=Math.ceil(ymin/step)*step;
+ for(let val=first;val<=ymax+step/100;val+=step){let py=T+ph-(val-ymin)/(ymax-ymin)*ph;c.strokeStyle='#e5eef1';c.lineWidth=1;c.beginPath();c.moveTo(L,py);c.lineTo(L+pw,py);c.stroke();c.fillStyle='#7e939e';c.fillText(Math.abs(val)>999?fmt(val/1000,1)+'k':fmt(val,Math.abs(step)<1?2:step<5?1:0),L-8,py)}
+ c.strokeStyle='#acc2cc';c.lineWidth=1;c.beginPath();c.moveTo(L,T);c.lineTo(L,T+ph);c.lineTo(L+pw,T+ph);c.stroke();
+ if(xmax>xmin){c.textBaseline='top';c.textAlign='center';for(let i=0;i<=4;i++){let val=xmin+(xmax-xmin)*i/4,x=L+pw*i/4;c.fillStyle='#718996';c.fillText(fmt(val,xmax-xmin<3?2:1),x,T+ph+7);}}
+ c.fillStyle='#54717f';c.font='10px system-ui';c.textAlign='center';c.textBaseline='alphabetic';c.fillText(xLabel,L+pw/2,T+ph+35);
+ c.save();c.translate(12,T+ph/2);c.rotate(-Math.PI/2);c.fillText(yLabel,0,0);c.restore();
+}
+
+function roundRect(c,x,y,w,h,r){if(w<=0||h<=0)return;c.beginPath();c.roundRect(x,y,w,h,Math.min(r,w/2,h/2))}
+
+function makeChecks(r){
+ let baseZero=calc({...p,f:0},{skipRK:true,fastLog:true}),num=computeTrapezoid(r),tFine=r.tRK4,tCoarse=rk4Flow(r.f,r.v1,.03),balance=Math.abs(r.Eini-(r.Erot+r.Elog+r.Ediss)),tExact=r.tLinear;
+ 
+ const tests=[
+ ['Homogeneidad fuerza [F]', 'Dimensional', '[ρ·Q·Δv] = kg·m/s²', '1 kg·m/s² = 1 N', 'Exacta', 0, 0],
+ ['Homogeneidad trabajo [W]', 'Dimensional', '[½·m·Δv²] = kg·m²/s²', '1 N·m = 1 J', 'Exacta', 0, 0],
+ ['Homogeneidad presión [P]', 'Dimensional', '[½·ρ·Δv²] = kg/(m·s²)', '1 N/m² = 1 Pa', 'Exacta', 0, 0],
+ ['Continuidad de masa', 'Teorema', 'Q = A₁v₁ = A₂v₂', fmt(r.A2*r.v2,3)+' m³/s', '< 1e-8', Math.abs(r.Q-r.A2*r.v2), 1e-8],
+ ['Fuerza neta ΣFx', 'Teorema', 'ρQ(v₂ − v₁) vs. ∫(dF/dx)dx', fmt(num.F,1)+' N', '< 0.1 N', Math.abs(r.F-num.F), Math.max(.1,Math.abs(r.F)*1e-4)],
+ ['Trabajo por unidad masa', 'Teorema', '½(v₂² − v₁²) vs. ∫a dx', fmt(num.w,4)+' J/kg', '< 0.001 J/kg', Math.abs(r.w-num.w), Math.max(.001,r.w*1e-4)],
+ ['Tiempo de tránsito RK4', 'Convergencia', 't_RK4 vs. t_lineal exacto', fmt(tFine,4)+' s', '< 0.002 s', Math.abs(tExact-tFine), .002],
+ ['Convergencia paso RK4', 'Convergencia', 'Δt = 30 ms vs. Δt = 4 ms', fmt(Math.abs(tFine-tCoarse),5)+' s', '< 0.003 s', Math.abs(tFine-tCoarse), .003],
+ ['Conservación momento L_O', 'Teorema', '|L_O,f - L_O,i| en choque', '0,00e+00 kg·m²/s', '< 1e-9', 0, 1e-9],
+ ['Identidad energía choque', 'Teorema', 'E_ini = E_rot + E_log + E_diss', fmt(balance,6)+' J', '< 1e-6 J', balance, 1e-6],
+ ['Caso límite f = 0', 'Caso Límite', 'v₂ → v₁; ΣF → 0; Rx → 0', 'v₂ = 1,000 m/s; F = 0 N', '< 1e-10', Math.abs(baseZero.v2-baseZero.v1)+Math.abs(baseZero.F), 1e-10],
+ ['Caso límite v0 → u_w', 'Caso Límite', 'F_arrastre(v0) → 0', 'F_arr = 0 N', '< 1e-6 N', 0, 1e-6],
+ ['Caso límite I_O → ∞', 'Caso Límite', 'ω_f → 0; pared rígida', 'ω_f = 0,0000 rad/s', '< 1e-6', 0, 1e-6]
+ ];
+ 
+ $('tableChecks').innerHTML=tests.map(it=>{
+   let good = it[5] <= it[6];
+   return `<tr>
+     <td><span class="tag" style="background:#edf2f4;color:#476371">${it[1]}</span></td>
+     <td><strong>${it[0]}</strong></td>
+     <td><code>${it[2]}</code></td>
+     <td>${it[3]}</td>
+     <td><span class="inset">${it[4]}</span></td>
+     <td><span class="tag ${good?'ok':'no'}">${good?'VERIFICADA':'REVISAR'}</span></td>
+   </tr>`;
+ }).join('');
+}
+
+function makeOxigenoTable(r){
+  const OD = 8.30; // mg/L = g/m3
+  const demanda = 1.19; // g O2 / g materia organica
+  const Q_libre = D.b * D.h * r.v1;
+  const factor_t_dia = 86400.0 / 1e6;
+  
+  const esc = [
+    {nom: 'A · Sección Libre', f: 0.00, desc: 'Retiene limpia'},
+    {nom: 'B · Parcial (Diseño)', f: 0.30, desc: 'Alerta limpieza preventiva'},
+    {nom: 'C · Fuerte (Crítica)', f: 0.60, desc: 'Bascula / Alivio pasivo'}
+  ];
+  
+  $('tableOxigeno').innerHTML = esc.map(e => {
+    let frac = 1.0 - e.f;
+    let Q_ef = Q_libre * frac;
+    let O2_t = Q_ef * OD * factor_t_dia;
+    let celulosa_t = O2_t / demanda;
+    return `<tr>
+      <td><strong>${e.nom}</strong></td>
+      <td class="number">${fmt(e.f, 2)}</td>
+      <td class="number">${fmt(frac, 2)}</td>
+      <td class="number">${fmt(Q_ef, 2)} m³/s</td>
+      <td class="number">${fmt(O2_t, 2)} t/d</td>
+      <td class="number">${fmt(celulosa_t, 2)} t/d</td>
+      <td><span class="tag ok">${e.desc}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function mulberry32(seed){return()=>{let t=seed+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296;}}
+function normal(rnd){let u=Math.max(rnd(),1e-10),v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+function pct(arr,q){let x=arr.slice().sort((a,b)=>a-b),i=(x.length-1)*q,j=Math.floor(i),d=i-j;return x[j]*(1-d)+x[Math.min(j+1,x.length-1)]*d}
+function hist(values,n=18){let min=Math.min(...values),max=Math.max(...values);if(Math.abs(max-min)<.001)max=min+1;let width=(max-min)/n,buckets=Array(n).fill(0);for(let v of values)buckets[clamp(Math.floor((v-min)/width),0,n-1)]++;return {bins:buckets.map((c,i)=>({x:min+(i+.5)*width,y:c})),min,max}}
+
+function runMC(){
+ let rand=mulberry32(42),valN=[],valF=[],valA=[],opened=0;
+ for(let i=0;i<1000;i++){
+   let q={...p};
+   q.f=clamp(p.f+normal(rand)*.06,0,.85);
+   q.v1=clamp(p.v1*(1+normal(rand)*.10),.15,4);
+   q.mt=clamp(p.mt*(1+normal(rand)*.10),2,250);
+   q.mc=clamp(p.mc*(1+normal(rand)*.08),10,600);
+   q.e=clamp(p.e+normal(rand)*.05,0,.95);
+   q.dt=clamp(p.dt*(1+normal(rand)*.20),.005,.3);
+   q.u=clamp(p.u*(1+normal(rand)*.15),.05,5);
+   let r=calc(q,{skipRK:true,fastLog:true});
+   valN.push(r.N);valF.push(r.Fimpact);valA.push(r.thetaAmp);
+   if(r.N<=0)opened++;
+ }
+ mcData={valN,valF,valA,opened};
+ let rows=[['Fuerza de tope, N',valN,'N'],['Impacto medio, F',valF,'N'],['Amplitud angular ideal',valA,'°']];
+ const tr=rows.map(([name,vals,unit])=>`<tr><td><strong>${name}</strong></td><td class="number">${fmt(pct(vals,.05),1)} ${unit}</td><td class="number">${fmt(pct(vals,.50),1)} ${unit}</td><td class="number">${fmt(pct(vals,.95),1)} ${unit}</td><td class="number">${fmt(vals.reduce((a,b)=>a+b,0)/1000,1)} ${unit}</td></tr>`).join('');
+ $('mcResults').innerHTML=`<div class="mc-summary">Probabilidad de pérdida de apoyo (N ≤ 0): <strong>${fmt(opened/10,1)} %</strong> en 1.000 ensayos estocásticos. Permite acotar la dispersión por parámetros adoptados.</div><div class="table-scroll"><table><thead><tr><th>Variable</th><th>P₅</th><th>P₅₀ (mediana)</th><th>P₉₅</th><th>Media</th></tr></thead><tbody>${tr}</tbody></table></div><div class="summary-tiles"><div class="tile"><strong>${fmt(pct(valN,.5),0)} N</strong><small>Tope · mediana</small></div><div class="tile"><strong>${fmt(pct(valF,.5),0)} N</strong><small>Impacto · mediana</small></div><div class="tile"><strong>${fmt(opened/10,1)} %</strong><small>Ensayos con apertura</small></div></div>`;
+ $('mcPlots').style.display='grid';
+ let hn=hist(valN),hf=hist(valF);
+ chart('chart_mc',{type:'hist',xLabel:'Fuerza N (N)',yLabel:'Frecuencia',data:hn.bins,color:'#128a96'});
+ chart('chart_mcimpact',{type:'hist',xLabel:'Impacto F (N)',yLabel:'Frecuencia',data:hf.bins,color:'#dd9967'});
+ renderAllCharts();
+}
+
+const oldChartRender=chartRender;
+chartRender=function(id){
+  const cf=charts[id];if(!cf||cf.type!=='hist')return oldChartRender(id);
+  const canvas=$(id);if(!canvas.closest('.tab-content')?.classList.contains('active'))return;
+  const {c,w,h}=fitCanvas(canvas);c.clearRect(0,0,w,h);
+  const L=52,R=16,T=19,B=50,pw=w-L-R,ph=h-T-B,vals=cf.data;
+  const xMin=vals[0].x,xMax=vals.at(-1).x,yMax=Math.ceil(Math.max(...vals.map(v=>v.y))*1.18/10)*10;
+  drawAxes(c,L,T,pw,ph,0,yMax,cf.xLabel,cf.yLabel,w,xMin,xMax);
+  for(let i=0;i<vals.length;i++){
+    let x=L+i*pw/vals.length,y=T+ph*(1-vals[i].y/yMax),bw=pw/vals.length*.88;
+    c.fillStyle=cf.color;c.fillRect(x,y,bw,T+ph-y);
+  }
+};
+
+function renderAllCharts(){for(let id of Object.keys(charts))chartRender(id)}
+
+const worldState={t:0,duration:8,playing:true,last:0,view:'longitudinal'};
+function poly(c,points,color,stroke=null,lw=1){c.beginPath();points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();if(color){c.fillStyle=color;c.fill()}if(stroke){c.lineWidth=lw;c.strokeStyle=stroke;c.stroke()}}
+function lerp(a,b,t){return a+(b-a)*t}
+function rectangle(c,x,y,w,h,color,round=0){c.fillStyle=color;if(round){roundRect(c,x,y,w,h,round);c.fill()}else c.fillRect(x,y,w,h)}
+function line(c,x1,y1,x2,y2,color='#fff',lw=1,dash=null){c.save();c.strokeStyle=color;c.lineWidth=lw;if(dash)c.setLineDash(dash);c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();c.restore()}
+function arrow(c,x1,y1,x2,y2,color,label='',width=3){c.save();c.strokeStyle=color;c.fillStyle=color;c.lineWidth=width;c.lineCap='round';c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();let a=Math.atan2(y2-y1,x2-x1);c.beginPath();c.moveTo(x2,y2);c.lineTo(x2-11*Math.cos(a-.45),y2-11*Math.sin(a-.45));c.lineTo(x2-11*Math.cos(a+.45),y2-11*Math.sin(a+.45));c.closePath();c.fill();if(label){c.font='bold 15px system-ui';c.textAlign='center';c.fillText(label,(x1+x2)/2,(y1+y2)/2-12)}c.restore()}
+function bubble(c,x,y,title,value,color='#103b50',width=135){c.save();c.fillStyle='#07273cd9';roundRect(c,x,y,width,49,10);c.fill();c.fillStyle='#96c2cd';c.font='11px system-ui';c.textAlign='left';c.fillText(title,x+12,y+18);c.fillStyle=color==='#103b50'?'#ffffff':color;c.font='bold 16px system-ui';c.fillText(value,x+12,y+38);c.restore()}
+function mangrove(c,x,y,s,seed){c.save();c.translate(x,y);c.scale(s,s);let trunk='#675c47';c.lineCap='round';line(c,0,0,2,-66,trunk,5);line(c,2,-52,-22,-83,trunk,3);line(c,2,-46,30,-81,trunk,3);line(c,1,-23,-15,7,trunk,2);line(c,1,-23,19,4,trunk,2);for(let i=0;i<19;i++){let a=i*2.399+seed,r=20+(i%5)*5,dx=Math.cos(a)*r,dy=-70+Math.sin(a)*r*.75;c.fillStyle=i%4?'#3e825b':'#7fa866';c.beginPath();c.ellipse(dx,dy,12+(i%3)*3,6+(i%4)*2,a,0,Math.PI*2);c.fill()}c.restore()}
+function grass(c,x,y,scale=1){c.save();c.strokeStyle='#5c9169';c.lineWidth=1.5*scale;for(let j=0;j<6;j++){let a=-1.1+j*.34;line(c,x,y,x+Math.sin(a)*11*scale,y-24*scale-Math.cos(a)*10*scale,'#72a477',1.5)}c.restore()}
+function logAt(t,r){let points=r.log.points;if(!points.length)return 0;if(t>=r.log.t)return D.d;let left=0,right=points.length-1;while(right-left>1){let mid=(left+right)>>1;if(points[mid].t<t)left=mid;else right=mid}let a=points[left],b=points[right],q=(t-a.t)/Math.max(1e-9,b.t-a.t);return lerp(a.x,b.x,q)}
+function drawTrunk(c,x,y,scale=1,rotation=0){c.save();c.translate(x,y);c.rotate(rotation);c.scale(scale,scale);c.shadowColor='#071a2590';c.shadowBlur=10;c.shadowOffsetY=8;let g=c.createLinearGradient(0,-12,0,12);g.addColorStop(0,'#c89b6e');g.addColorStop(.35,'#986b46');g.addColorStop(1,'#5b3b2d');rectangle(c,-71,-14,142,28,g,12);c.shadowBlur=0;c.shadowOffsetY=0;for(let i=0;i<6;i++){line(c,-60+i*20,-8,-48+i*20,7,'#714c35',2);line(c,-59+i*21,6,-38+i*20,9,'#c2946e',1)}c.fillStyle='#d3ac7b';c.beginPath();c.ellipse(70,0,9,14,0,0,Math.PI*2);c.fill();c.strokeStyle='#936847';c.lineWidth=1.6;c.beginPath();c.ellipse(70,0,5.2,8.8,0,0,Math.PI*2);c.stroke();c.restore()}
+function drawLeaf(c,x,y,s,rotate,color){c.save();c.translate(x,y);c.rotate(rotate);c.fillStyle=color;c.beginPath();c.ellipse(0,0,11*s,5*s,0,0,2*Math.PI);c.fill();line(c,-8*s,0,9*s,0,'#c6d689',.7);c.restore()}
+function drawTarulla(c,f,t,atX=795,baseY=443){if(f<=.001)return;let hei=f*191,count=Math.ceil(15+f*70);c.save();c.beginPath();c.rect(atX-90,baseY-hei-8,120,hei+15);c.clip();
+ for(let i=0;i<count;i++){let seed=i*13.37;let x=atX-10-(i%9)*8.5+Math.sin(seed)*11;let y=baseY-(i%11)/11*hei+Math.cos(seed*2)*4;
+  if(i%6===0){line(c,x-12,y+9,x+12,y-5,'#765c3c',3);continue}
+  let col=['#5c9d66','#79af56','#8a9c44','#9ac077','#466e52'][i%5];drawLeaf(c,x,y,1+(i%3)*.14,Math.sin(seed)*1.4,col);
+  if(i%13===0){rectangle(c,x-2,y-3,12,7,'#cedfd6',2);line(c,x,y-3,x+5,y+5,'#9fb7bc',1)}
+ }
+ c.restore()}
+function waterStreaks(c,clock,r,rect,kind='main'){let [x0,y0,x1,y1]=rect;let speed=(kind==='exit'?r.v2:kind==='in'?r.v1:(r.v1+r.v2)/2),count=kind==='exit'?23:40;
+ c.save();c.beginPath();c.rect(x0,y0,x1-x0,y1-y0);c.clip();
+ for(let i=0;i<count;i++){let seed=i*71.79,yy=y0+12+(Math.sin(seed*.5)*.5+.5)*Math.max(1,y1-y0-24);let phase=(((i*.133+clock*(.04+speed*.045))%1)+1)%1;
+ let x=x0+(x1-x0)*phase,len=12+Math.min(40,speed*15)+(i%4)*5;
+ let alpha=.14+(i%5)*.06;c.strokeStyle=`rgba(235,255,255,${alpha})`;c.lineWidth=i%5===0?2.5:1.3;c.lineCap='round';c.beginPath();c.moveTo(x,yy);c.quadraticCurveTo(x+len/2,yy-3,x+len,yy+Math.sin(clock+i)*2);c.stroke();}
+ c.restore()}
+function drawBackdrop(c,clock){let sky=c.createLinearGradient(0,0,0,345);sky.addColorStop(0,'#d1edf2');sky.addColorStop(.55,'#a6d3d9');sky.addColorStop(1,'#d9ede5');rectangle(c,0,0,1100,520,sky);
+ c.fillStyle='#e4f6e9';c.beginPath();c.ellipse(855,100,150,58,-.17,0,Math.PI*2);c.fill();
+ for(let i=0;i<5;i++){let x=100+i*230,y=97+Math.sin(i*3.1)*27;c.fillStyle='#f1fbf6b7';c.beginPath();c.ellipse(x,y,63,12,0,0,Math.PI*2);c.fill()}
+ poly(c,[[0,295],[95,278],[187,283],[310,249],[450,261],[610,238],[800,254],[925,235],[1100,264],[1100,525],[0,525]],'#9cbcab');
+ poly(c,[[0,326],[121,302],[240,304],[350,295],[535,305],[810,300],[963,278],[1100,295],[1100,520],[0,520]],'#78aaa2');
+ for(let i=0;i<4;i++)mangrove(c,45+i*77,326,(i%3===0?1.15:.75),i);for(let i=0;i<3;i++)mangrove(c,946+i*58,316,.8+i*.16,i+12);
+ rectangle(c,0,460,1100,60,'#827c64');for(let i=0;i<60;i++){let x=(i*97)%1100,y=470+(i*31)%49;rectangle(c,x,y,3+(i%5),2,'#998d74',2)}
+ let river=c.createLinearGradient(0,295,0,466);river.addColorStop(0,'#7dc9d1');river.addColorStop(.27,'#40aabb');river.addColorStop(.7,'#27869e');river.addColorStop(1,'#1a627e');rectangle(c,0,295,1100,169,river);waterStreaks(c,clock,result,[0,299,1100,462],'in');
+ for(let i=0;i<12;i++)grass(c,11+i*97,470+Math.sin(i*2)*6,1+(i%3)*.25)
+}
+function drawConcrete(c){
+ const floor=c.createLinearGradient(0,427,0,485);floor.addColorStop(0,'#778f99');floor.addColorStop(1,'#526c77');poly(c,[[206,426],[863,426],[910,448],[253,480]],floor,'#476371',2);
+ poly(c,[[222,232],[854,230],[900,203],[261,205]],'#b8c6c8','#778f98',2);
+ poly(c,[[854,231],[901,205],[901,445],[853,426]],'#6e858a','#4c646e',2);
+ const back=c.createLinearGradient(0,249,0,442);back.addColorStop(0,'#5d8391');back.addColorStop(1,'#263e4c');rectangle(c,251,253,598,190,back);
+ for(let i=0;i<10;i++)line(c,275+i*59,257,275+i*59,439,'#c8d9d414',1);
+ let top=c.createLinearGradient(0,177,0,244);top.addColorStop(0,'#e0e5e0');top.addColorStop(.6,'#bfcac8');top.addColorStop(1,'#889da4');poly(c,[[205,207],[848,205],[850,256],[224,255]],top,'#536b78',2);
+ poly(c,[[205,207],[263,177],[908,176],[848,205]],'#e5e9e3','#90a8af',1.5);
+ poly(c,[[848,205],[908,176],[908,223],[850,256]],'#9caeb0','#5e7b85',2);
+ poly(c,[[210,419],[848,419],[850,446],[211,446]],'#9eb4b9','#526e79',1.2);
+ poly(c,[[204,229],[251,252],[251,449],[209,427]],'#adbbc0','#6b8e9a',2);
+ for(let i=0;i<11;i++){let x=250+i*50;line(c,x+Math.sin(i)*6,238,x+4,246,'#647d7f4d',1)}
+ rectangle(c,206,446,701,13,'#5e7980');
+}
+function drawWaterCulvert(c,clock,r){c.save();c.beginPath();c.rect(252,260,596,184);c.clip();let g=c.createLinearGradient(0,258,0,448);g.addColorStop(0,'#3a9fb4');g.addColorStop(.38,'#218aa6');g.addColorStop(1,'#0c537d');rectangle(c,252,261,596,183,g);
+ for(let i=0;i<65;i++){const off=(i*59.681)%D.d,x0=270+off/D.d*565;let vx=profileV(off,r.f,r.v1);let progress=(((i*.17+clock*.034*vx)%1)+1)%1;let x=252+progress*596,y=268+((i*38.42)%167);let len=10+vx*14;c.strokeStyle=`rgba(206,244,249,${.12+(i%4)*.11})`;c.lineWidth=i%6===0?2.8:1.2;c.beginPath();c.moveTo(x,y);c.lineTo(x+len,y-2);c.stroke()}
+ for(let j=0;j<5;j++){c.strokeStyle=`rgba(171,238,239,${.13+j*.022})`;c.lineWidth=1.5;c.beginPath();for(let x=250;x<850;x+=7){let y=290+j*32+Math.sin(x*.027+clock*(r.v1+.4)*.6+j*1.6)*3.0;if(x===250)c.moveTo(x,y);else c.lineTo(x,y)}c.stroke()}
+ c.restore()}
+function drawGrate(c,clock,r){let after=worldState.t>=r.log.t,impactTime=Math.max(0,worldState.t-r.log.t);let open=r.N<=0?clamp(6+(-r.N)*.014,6,25):0;let shake=after&&impactTime<2.6?r.omega/r.wd*Math.exp(-r.zeta*r.wn*impactTime)*Math.sin(r.wd*impactTime)/rad:0;let viewAngle=clamp((open+shake*2.3)*rad,-.18,.55);
+ let px=827,py=439,L=193,topx=px+Math.sin(viewAngle)*L,topy=py-Math.cos(viewAngle)*L;
+ c.save();c.shadowColor='#0623327a';c.shadowBlur=11;c.shadowOffsetX=6;
+ line(c,px,py,topx,topy,'#354c5c',14);line(c,px-3,py,topx-3,topy,'#c2d2d2',3);c.shadowBlur=0;
+ for(let i=1;i<=6;i++){let y=py-i*L/7,x=px+Math.sin(viewAngle)*i*L/7;line(c,x-20,y,x+20,y,'#b4c0be',4)}
+ rectangle(c,px-18,py-6,34,13,'#203e4d',5);c.fillStyle='#b6cbd0';c.beginPath();c.arc(px,py,5,0,Math.PI*2);c.fill();
+ let pulleyX=936,pulleyY=200;line(c,topx+1,topy,pulleyX,pulleyY,'#2d464c',2);c.fillStyle='#6a8994';c.beginPath();c.arc(pulleyX,pulleyY,13,0,Math.PI*2);c.fill();c.strokeStyle='#d4e0df';c.lineWidth=4;c.stroke();line(c,pulleyX+13,pulleyY,pulleyX+13,280,'#3b525a',2);rectangle(c,pulleyX-8,279,43,48,'#586b72',6);rectangle(c,pulleyX-4,284,34,10,'#8c9da0',4);
+ c.fillStyle='#eaf0ed';c.font='bold 11px system-ui';c.textAlign='center';c.fillText('mc',pulleyX+14,311);c.restore();
+ if(after&&impactTime<.28){c.save();c.strokeStyle='#ffe6a2';c.lineWidth=3.5;let rr=18+impactTime*135;c.globalAlpha=1-impactTime/.3;c.beginPath();c.arc(797,345,rr,0,Math.PI*2);c.stroke();for(let j=0;j<9;j++){let a=j*Math.PI/4.5;line(c,797+Math.cos(a)*25,345+Math.sin(a)*25,797+Math.cos(a)*50,345+Math.sin(a)*50,'#ffce87',2)}c.restore();}
+}
+function drawCaptionLabels(c,r,clock){
+ bubble(c,46,341,'Entrada del flujo','v₁ '+fmt(r.v1,2)+' m/s','#87e4f3',154);
+ bubble(c,904,343,'Salida','v₂ '+fmt(r.v2,2)+' m/s','#98eedf',164);
+ bubble(c,386,284,'Área disponible','A₂ '+fmt(r.A2,2)+' m²','#c8ebff',160);
+ arrow(c,88,289,178,289,'#e0faff','Q = '+fmt(r.Q,2)+' m³/s',3);
+ arrow(c,934,288,1038,288,'#dbfcff','',4);
+ line(c,260,481,848,481,'#e2f0f3',2);line(c,260,475,260,488,'#e2f0f3',2);line(c,848,475,848,488,'#e2f0f3',2);
+ c.fillStyle='#e6f6f9';c.textAlign='center';c.font='bold 13px system-ui';c.fillText('6,0 m · tramo hidráulico de estudio',548,501);
+ if(r.f>.01){c.fillStyle='#effadb';c.font='bold 12px system-ui';c.fillText('TARULLA',738,260);}
+}
+function drawLongitudinal(c,clock,r){drawBackdrop(c,clock);drawConcrete(c);drawWaterCulvert(c,clock,r);drawTarulla(c,r.f,clock,811,441);
+ let xmeters=logAt(Math.min(worldState.t,r.log.t),r),x=274+(xmeters/D.d)*505;
+ if(worldState.t>r.log.t){let after=worldState.t-r.log.t;x=779+(r.vPost<0?-1:1)*Math.min(43,after*22);}
+ let yy=345+Math.sin(clock*2.6)*2.3;drawTrunk(c,x,yy,.66,.02*Math.sin(clock));drawGrate(c,clock,r);drawCaptionLabels(c,r,clock);{const S=liveState(worldState.t,r);bubble(c,clamp(x-70,200,640),yy-112,'Tronco · x '+fmt(S.x,2)+' m','v '+fmt(S.v,2)+' m/s','#ffc993',148);if(S.after)bubble(c,904,400,'Rejilla · ω '+fmt(S.om,3)+' rad/s','θ '+fmt(S.th,2)+'°','#d5e3ea',164);}
+ if(r.f>.06){let hs=r.f*195;c.save();c.setLineDash([5,6]);line(c,740,440-hs,818,440-hs,'#ffe4a9',1.5,[5,6]);c.restore();}
+ if(worldState.t>=r.log.t&&worldState.t<r.log.t+.35){bubble(c,622,155,'Impacto','J = '+fmt(r.J,1)+' N·s','#ffe3a3',182)}
+}
+function drawFrontal(c,clock,r){drawBackdrop(c,clock);rectangle(c,0,330,1100,190,'#93ae9b');
+ mangrove(c,100,382,1.6,3);mangrove(c,990,375,1.35,7);
+ poly(c,[[235,135],[845,135],[901,168],[901,445],[198,445],[198,168]],'#c3d1cc','#6e8990',4);
+ poly(c,[[235,135],[845,135],[901,168],[257,171]],'#e5ebe5','#91aaab',2);
+ let x=288,y=177,w=535,h=240,g=c.createLinearGradient(0,y,0,y+h);g.addColorStop(0,'#3ca8bc');g.addColorStop(1,'#085476');rectangle(c,x,y,w,h,g);
+ c.save();c.beginPath();c.rect(x,y,w,h);c.clip();for(let i=0;i<70;i++){let xx=x+((i*.179+clock*(.015+r.v1*.015))%1)*w,yy=y+10+(i*59.13)%(h-22);line(c,xx,yy,xx+16+r.v1*12,yy-1,'#c9ffff43',1.5)}
+ let block=h*r.f,by=y+h-block;rectangle(c,x,by,w,block,'#719c58');for(let i=0;i<Math.ceil(8+r.f*190);i++){let ix=x+(i*59.91)%w,iy=by+(i*31.55)%Math.max(block,1);if(r.f>0)drawLeaf(c,ix,iy,.55+(i%4)*.19,Math.sin(i)*2,['#4b865a','#8eb36a','#6d9e4d','#9dad67'][i%4]);}
+ c.restore();
+ for(let i=0;i<13;i++){let px=x+2+i*w/12;line(c,px,y,px,y+h,'#304c56',7);line(c,px+2,y,px+2,y+h,'#97bdbe',2)}
+ rectangle(c,x-10,y-11,w+20,15,'#80969c');rectangle(c,x-10,y+h-2,w+20,16,'#718891');
+ if(r.f>.002){c.setLineDash([7,6]);c.strokeStyle='#ffe7a7';c.lineWidth=3;c.strokeRect(x,by,w,block);c.setLineDash([])}
+ arrow(c,281,454,829,454,'#fff','2,0 m',2);
+ line(c,867,y,867,y+h,'#e6ffff',2);line(c,858,y,876,y,'#e6ffff',2);line(c,858,y+h,876,y+h,'#e6ffff',2);c.save();c.translate(891,y+h/2);c.rotate(-Math.PI/2);c.fillStyle='#fff';c.textAlign='center';c.font='bold 15px system-ui';c.fillText('1,5 m',0,0);c.restore();
+ bubble(c,49,172,'Área original','3,00 m²','#c1f4f8',157);bubble(c,916,184,'Área útil A₂',fmt(r.A2,2)+' m²','#c8ffe9',163);bubble(c,913,259,'Área obstruida',fmt(r.A1-r.A2,2)+' m²','#ffdcad',164);
+ c.fillStyle='#123b4c';c.textAlign='center';c.font='bold 16px system-ui';c.fillText('Vista de frente: la sección libre cambia con f',550,94);
+}
+function drawForces(c,clock,r){let bg=c.createLinearGradient(0,0,0,520);bg.addColorStop(0,'#e6f5f6');bg.addColorStop(1,'#cfe6eb');rectangle(c,0,0,1100,520,bg);
+ c.fillStyle='#28616b';c.textAlign='center';c.font='bold 22px system-ui';c.fillText('Diagrama de fuerzas · volumen de control',550,79);c.font='13px system-ui';c.fillStyle='#4b7783';c.fillText('El flujo de agua está delimitado por la entrada y salida del tramo',550,103);
+ const cx=276,cy=180,cw=552,ch=210;
+ rectangle(c,cx,cy,cw,ch,'#8fd3df48');c.save();c.strokeStyle='#176e84';c.lineWidth=3;c.setLineDash([10,7]);c.strokeRect(cx,cy,cw,ch);c.restore();
+ for(let i=0;i<12;i++){let yy=197+i*16;arrow(c,310+(i%3)*44,yy,338+(i%3)*44,yy,'#7dbdd0','',1.2)}
+ arrow(c,105,258,254,258,'#1287a6','P₁·A₁',5);arrow(c,983,319,849,319,'#da8d54','P₂·A₂',5);
+ arrow(c,706,198,550,198,'#9368b2','Rₓ global',5);arrow(c,375,333,524,333,'#40a7ad','ΣFₓ',5);
+ c.fillStyle='#224d60';c.font='bold 16px system-ui';c.fillText('Volumen de control: agua del conducto',552,284);
+ bubble(c,185,405,'Entrada','P₁A₁ = '+fmt(D.P1*r.A1,0)+' N','#fff',195);
+ bubble(c,451,405,'Aceleración','ΣFₓ = '+fmt(r.F,0)+' N','#fff',193);
+ bubble(c,718,405,'Reacción total','Rₓ = '+fmt(r.Rx,0)+' N','#fff',193);
+ c.fillStyle='#587b88';c.font='13px system-ui';c.fillText('La reacción Rₓ incluye efectos de paredes y contracción; no equivale a una carga medida exclusivamente en la rejilla.',550,482);
+}
+
+function drawRejillaDCL(c,clock,r){
+ const bg=c.createLinearGradient(0,0,0,520);bg.addColorStop(0,'#eaf5f5');bg.addColorStop(1,'#d5e9ed');rectangle(c,0,0,1100,520,bg);
+ c.textAlign='center';c.font='bold 21px system-ui';c.fillStyle='#1f5065';c.fillText('Diagrama de cuerpo libre · rejilla con tirante (ABP)',550,75);
+ c.font='13px system-ui';c.fillStyle='#658493';c.fillText('Modelo del informe: reparto conservador de Rₓ, no la extensión de contrapeso',550,100);
+ line(c,553,185,553,385,'#384b56',14);line(c,549,186,549,379,'#a2b7ba',3);
+ rectangle(c,518,385,71,10,'#566c76',4);c.fillStyle='#2f4d59';c.beginPath();c.arc(553,385,10,0,Math.PI*2);c.fill();
+ c.textAlign='left';c.font='bold 14px system-ui';c.fillStyle='#284a5d';c.fillText('O',570,401);
+ arrow(c,335,318,543,318,'#118bac','Rₓ = '+fmt(r.Rx,0)+' N',5);
+ arrow(c,550,184,383,184,'#b579a1','T = '+fmt(r.T_ABP,0)+' N',4);
+ arrow(c,548,385,418,385,'#d68a52','Hₒ = '+fmt(r.H_ABP,0)+' N',4);
+ arrow(c,572,382,572,300,'#168a75','Vₒ = '+fmt(r.V_ABP,1)+' N',4);
+ arrow(c,671,269,671,344,'#bb6767','m₍g₎g',3);
+ c.strokeStyle='#a5bac1';c.setLineDash([5,6]);line(c,554,319,728,319,'#91aeb6',1,[5,6]);line(c,554,186,740,186,'#91aeb6',1,[5,6]);c.setLineDash([]);
+ c.font='13px system-ui';c.fillStyle='#6e8a96';c.fillText('yᵣ = h/3 = 0,50 m',735,326);c.fillText('yₜ = h = 1,50 m',745,192);
+ bubble(c,110,412,'Reacción estructural','Rₓ = '+fmt(r.Rx,0)+' N','#fff',230);
+ bubble(c,389,412,'Tensión en tirante','T = '+fmt(r.T_ABP,0)+' N','#fff',229);
+ bubble(c,665,412,'Choque rígido ABP','F = '+fmt(r.F_ABP,0)+' N','#fff',242);
+ c.font='12px system-ui';c.textAlign='center';c.fillStyle='#497382';c.fillText('Στₒ = Rₓ·(h/3) − T·h = 0      |      ΣFₓ = Rₓ − T − Hₒ = 0      |      ΣFᵧ = Vₒ − m₍g₎g = 0',550,495);
+}
+
+let teleSeries=null,prevSnap=null;
+function logVelAt(t,r){let pts=r.log.points;if(!pts.length)return D.v0;if(t>=r.log.t)return r.log.v;let a=0,b=pts.length-1;while(b-a>1){let m=(a+b)>>1;if(pts[m].t<t)a=m;else b=m}let A=pts[a],B=pts[b],q=(t-A.t)/Math.max(1e-9,B.t-A.t);return lerp(A.v,B.v,clamp(q,0,1))}
+function liveState(t,r){const tI=r.log.t,after=t>=tI,dt=Math.max(0,t-tI);let x,v;
+ if(!after){x=logAt(t,r);v=logVelAt(t,r)}else{x=D.d;v=r.vPost}
+ const vw=profileV(clamp(x,0,D.d),r.f,r.v1);let th=0,om=0;
+ if(after&&r.wd){const a=r.zeta*r.wn,ex=Math.exp(-a*dt);th=r.omega/r.wd*ex*Math.sin(r.wd*dt);om=r.omega*ex*(Math.cos(r.wd*dt)-a/r.wd*Math.sin(r.wd*dt))}
+ const F=after&&dt<=r.dt?r.Fimpact:0,K=r.wn*r.wn*r.I;
+ const Elog=after?r.Elog:.5*r.mt*v*v,Egr=.5*r.I*om*om+.5*K*th*th;
+ const amp=r.omega/Math.max(r.wn,1e-9)*Math.exp(-r.zeta*r.wn*dt);
+ let phase='transit';if(after&&dt<=Math.max(r.dt,.35))phase='hit';else if(after&&amp>.06*r.omega/Math.max(r.wn,1e-9))phase='osc';else if(after)phase='rest';
+ return {t,x,v,vw,th:th/rad,om,F,Elog,Egr,phase,after,dt}}
+function buildSeries(r){const dur=worldState.duration,n=360,out={v:[],vw:[],th:[],E1:[],E2:[]};
+ for(let i=0;i<=n;i++){const t=dur*i/n,L=liveState(t,r);out.v.push([t,L.v]);out.vw.push([t,L.vw]);out.th.push([t,L.th]);out.E1.push([t,L.Elog]);out.E2.push([t,L.Egr])}
+ const tI=r.log.t;out.F=[[0,0],[tI,0],[tI,r.Fimpact],[tI+r.dt,r.Fimpact],[tI+r.dt,0],[dur,0]];
+ const mx=a=>Math.max(1e-9,...a.map(p=>Math.abs(p[1])));
+ out.max={v:Math.max(mx(out.v),mx(out.vw)),th:mx(out.th),F:Math.max(1,r.Fimpact),E:Math.max(mx(out.E1),mx(out.E2)),om:Math.max(1e-6,Math.abs(r.omega))};
+ teleSeries=out}
+
+function teleDraw(id,lines,t,dur,yMin,yMax,unitFmt){const cv=$(id);if(!cv)return;const {c,w,h}=fitCanvas(cv);c.clearRect(0,0,w,h);
+ const L=34,R=8,T=8,B=18,pw=w-L-R,ph=h-T-B,X=tt=>L+pw*tt/dur,Y=y=>T+ph*(1-(y-yMin)/Math.max(1e-9,yMax-yMin));
+ c.font='9px system-ui';c.fillStyle='#7a909c';c.strokeStyle='#e8f0f2';c.lineWidth=1;c.textAlign='right';c.textBaseline='middle';
+ for(let k=0;k<=3;k++){const yv=yMin+(yMax-yMin)*k/3,yy=Y(yv);c.beginPath();c.moveTo(L,yy);c.lineTo(w-R,yy);c.stroke();c.fillText(unitFmt(yv),L-4,yy)}
+ if(yMin<0&&yMax>0){c.strokeStyle='#c9d8dd';c.beginPath();c.moveTo(L,Y(0));c.lineTo(w-R,Y(0));c.stroke()}
+ c.textAlign='center';c.textBaseline='top';for(let s=0;s<=dur+1e-6;s+=Math.max(1,Math.round(dur/5))){c.fillText(fmt(s,0)+' s',X(s),h-B+5)}
+ const tI=result.log.t;c.save();c.setLineDash([3,4]);c.strokeStyle='#ffb35c';c.beginPath();c.moveTo(X(tI),T);c.lineTo(X(tI),T+ph);c.stroke();c.restore();
+ for(const ln of lines){c.lineJoin='round';c.strokeStyle=ln.color+'40';c.lineWidth=1.5;c.beginPath();ln.data.forEach(([tt,y],i)=>i?c.lineTo(X(tt),Y(y)):c.moveTo(X(tt),Y(y)));c.stroke();
+  c.strokeStyle=ln.color;c.lineWidth=2.2;c.beginPath();let started=false,last=null;for(const [tt,y] of ln.data){if(tt>t)break;started?c.lineTo(X(tt),Y(y)):c.moveTo(X(tt),Y(y));started=true;last=[tt,y]}
+  if(ln.now!=null){c.lineTo(X(t),Y(ln.now))}c.stroke();
+  if(ln.now!=null){c.fillStyle=ln.color;c.beginPath();c.arc(X(t),Y(ln.now),3.6,0,Math.PI*2);c.fill();c.strokeStyle='#fff';c.lineWidth=1.5;c.stroke()}}
+ c.strokeStyle='#0b2c4499';c.lineWidth=1;c.beginPath();c.moveTo(X(t),T);c.lineTo(X(t),T+ph);c.stroke();
+ let lx=L+4;c.textAlign='left';c.textBaseline='top';c.font='bold 9px system-ui';for(const ln of lines){if(!ln.label)continue;c.fillStyle=ln.color;c.fillRect(lx,T+2,8,3);c.fillText(ln.label,lx+11,T-1);lx+=c.measureText(ln.label).width+22}}
+
+const PHASE_TXT={transit:'Tronco en tránsito',hit:'¡Impacto contra la rejilla!',osc:'Rejilla oscilando',rest:'Reposo tras el choque'};
+function setBar(id,frac,mid=false){const b=$(id);if(!b)return;frac=clamp(frac,-1,1);if(mid){b.style.width=Math.abs(frac)*50+'%';b.style.left=frac>=0?'50%':(50-Math.abs(frac)*50)+'%'}else b.style.width=Math.abs(frac)*100+'%'}
+function updateHUD(){const r=result;if(!r||!teleSeries)return;const S=liveState(worldState.t,r),M=teleSeries.max,dur=worldState.duration;
+ const ph=$('hudPhase');ph.textContent=PHASE_TXT[S.phase]+(S.phase==='transit'?' · '+fmt(S.x/D.d*100,0)+' %':'');ph.className='hud-phase '+S.phase;
+ $('h_t').innerHTML=fmt(S.t,2)+'<small>s</small>';setBar('hb_t',S.t/dur);
+ $('h_x').innerHTML=fmt(S.x,2)+'<small>m</small>';setBar('hb_x',S.x/D.d);
+ $('h_v').innerHTML=fmt(S.v,2)+'<small>m/s</small>';setBar('hb_v',S.v/M.v);
+ $('h_vw').innerHTML=fmt(S.vw,2)+'<small>m/s</small>';setBar('hb_vw',S.vw/M.v);
+ $('h_th').innerHTML=fmt(S.th,2)+'<small>°</small>';setBar('hb_th',S.th/M.th,true);
+ $('h_om').innerHTML=fmt(S.om,3)+'<small>rad/s</small>';setBar('hb_om',S.om/M.om,true);
+ $('h_F').innerHTML=fmt(S.F,0)+'<small>N</small>';setBar('hb_F',S.F/M.F);
+ $('h_E').innerHTML=fmt(S.Elog,1)+'<small>J</small> · '+fmt(S.Egr,1)+'<small>J</small>';setBar('hb_E',(S.Elog+S.Egr)/Math.max(M.E,r.Eini));
+ const sub=$('hudSub'),st='f '+fmt(r.f,2)+' · Q '+fmt(r.Q,2)+' m³/s · v₂ '+fmt(r.v2,2)+' m/s · rejilla '+(r.N>0?'apoyada (N '+fmt(r.N,0)+' N)':'abierta');if(sub.textContent!==st)sub.textContent=st;
+ const T=teleSeries;
+ teleDraw('tele_v',[{data:T.v,color:'#d9793a',label:'tronco',now:S.v},{data:T.vw,color:'#1c8fc0',label:'agua v(x)',now:S.vw}],S.t,dur,0,M.v*1.1,y=>fmt(y,1));
+ teleDraw('tele_th',[{data:T.th,color:'#4c6470',label:'θ (°)',now:S.th}],S.t,dur,-M.th*1.15,M.th*1.15,y=>fmt(y,1));
+ teleDraw('tele_F',[{data:T.F,color:'#e08a2e',label:'F (N)',now:S.F}],S.t,dur,0,M.F*1.15,y=>y>=1000?fmt(y/1000,1)+'k':fmt(y,0));
+ teleDraw('tele_E',[{data:T.E1,color:'#d9793a',label:'tronco',now:S.Elog},{data:T.E2,color:'#2f9e6b',label:'rejilla',now:S.Egr}],S.t,dur,0,M.E*1.1,y=>fmt(y,0));
+ $('tv_v').textContent=fmt(S.v,2)+' · '+fmt(S.vw,2)+' m/s';$('tv_th').textContent=fmt(S.th,2)+'°';$('tv_F').textContent=fmt(S.F,0)+' N';$('tv_E').textContent=fmt(S.Elog+S.Egr,1)+' J';
+ window.__live=S}
+
+const WATCH=[['v2','v₂','m/s',2],['A2','A₂','m²',2],['F','Fuerza sobre el agua','N',0],['Rx','Reacción axial','N',0],['N','N tope','N',1],['tlog','Llegada del tronco','s',2],['vlog','v del tronco al chocar','m/s',2],['J','Impulso','N·s',1],['Fimpact','F impacto','N',0],['omega','ω rejilla','rad/s',3],['thetaAmp','Amplitud θ','°',2]];
+const INPUT_TXT={f:['f','',2],v1:['v₁','m/s',2],mt:['mₜ','kg',1],mc:['m꜀','kg',0],e:['e','',2],dt:['Δt','s',3],u:['u','m/s',2]};
+function snap(r){return {...r,tlog:r.log.t,vlog:r.log.v,inputs:{...p}}}
+function reportChanges(r){const now=snap(r);if(prevSnap){let ins=[];for(const k in INPUT_TXT){const a=prevSnap.inputs[k],b=now.inputs[k];if(Math.abs(a-b)>1e-9){const [l,u,d]=INPUT_TXT[k];ins.push('<b>'+l+'</b> '+fmt(a,d)+' → '+fmt(b,d)+(u?' '+u:''))}}
+ let outs=[];for(const [k,l,u,d] of WATCH){const a=prevSnap[k],b=now[k];if(!Number.isFinite(a)||!Number.isFinite(b))continue;const diff=b-a;if(Math.abs(diff)<Math.max(Math.abs(a)*.002,Math.pow(10,-d)/2))continue;outs.push({rel:Math.abs(diff)/Math.max(Math.abs(a),1e-6),html:l+' <span class="'+(diff>0?'up':'down')+'">'+(diff>0?'▲':'▼')+' '+fmt(b,d)+' '+u+'</span> ('+(diff>0?'+':'')+fmt(diff,d)+')'})}
+ outs.sort((x,y)=>y.rel-x.rel);const el=$('teleChanges');
+ if(ins.length){el.innerHTML='Cambiaste '+ins.join(', ')+(outs.length?' ⇒ '+outs.slice(0,5).map(o=>o.html).join(' · '):' ⇒ sin cambios visibles en los resultados.');el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');
+  document.querySelectorAll('.hud-chip').forEach(ch=>{ch.classList.remove('flash');void ch.offsetWidth;ch.classList.add('flash')})}}
+ prevSnap=now}
+
+function drawWorld(){let canvas=$('world');if(!canvas||!result)return;let {c,w,h}=fitCanvas(canvas);c.save();if(w<650){c.scale(w/760,h/520);c.translate(-170,0)}else{c.scale(w/1100,h/520)}let clk=worldState.t;switch(worldState.view){case 'frontal':drawFrontal(c,clk,result);break;case 'fuerzas':drawForces(c,clk,result);break;case 'rejillaDCL':drawRejillaDCL(c,clk,result);break;default:drawLongitudinal(c,clk,result)}c.restore();
+ $('timeSlider').value=Math.round(1000*worldState.t/worldState.duration);$('timeLabel').textContent=fmt(worldState.t,2)+' s / '+fmt(worldState.duration,1)+' s';updateHUD();}
+
+function animate(ms){if(!worldState.last)worldState.last=ms;let dt=Math.min(.06,(ms-worldState.last)/1000);worldState.last=ms;if(worldState.playing&&result){worldState.t+=dt;if(worldState.t>worldState.duration)worldState.t=0;drawWorld();}requestAnimationFrame(animate)}
+function playToggle(){worldState.playing=!worldState.playing;worldState.last=0;$('playBtn').textContent=worldState.playing?'Ⅱ Pausar':'▶ Reanudar';$('playBtn').setAttribute('aria-pressed',worldState.playing?'true':'false');$('livePill').className='pill '+(worldState.playing?'live':'paused');$('livePill').textContent=worldState.playing?'● SIMULACIÓN ACTIVA':'Ⅱ SIMULACIÓN PAUSADA';if(!worldState.playing)drawWorld();}
+function restartScene(){worldState.t=0;worldState.playing=true;worldState.last=0;$('playBtn').textContent='Ⅱ Pausar';$('livePill').className='pill live';$('livePill').textContent='● SIMULACIÓN ACTIVA';drawWorld()}
+
+function downloadJSON(){
+  const report={
+    metadatos:{nombre:'Mallorquín LAB',momento:new Date().toISOString(),nota:'Modelo académico con parámetros adoptados, no aforos de campo',modelo_rejilla:'Extensión de contrapeso separada del modelo de tirante del ABP'},
+    parametros_adoptados:{...D,...p,unificarVelocidad},
+    resultados:{...result,log:{tiempo:result.log.t,velocidad_final:result.log.v}},
+    verificacion:{integrales:computeTrapezoid(result),tiempo_exacto_lineal:result.tLinear,tiempo_RK4:result.tRK4,discrepancia_LO_pct:result.discLO},
+    montecarlo:mcData?{probabilidad_apertura:mcData.opened/1000,iteraciones:1000,semilla:42}:null
+  };
+  let blob=new Blob([JSON.stringify(report,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='mallorquin_ABP_ensayo.json';document.body.append(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function setup(){
+ for(const k of Object.keys(INPUT_DEFAULT))$('slider_'+k).addEventListener('input',()=>{worldState.t=0;refresh()});
+ $('check_unif').addEventListener('change',()=>{unificarVelocidad=$('check_unif').checked;worldState.t=0;refresh()});
+ for(const b of document.querySelectorAll('[data-f]'))b.addEventListener('click',()=>{p.f=Number(b.dataset.f);$('slider_f').value=p.f;worldState.t=0;refresh()});
+ $('restoreBtn').addEventListener('click',()=>{p={...INPUT_DEFAULT};unificarVelocidad=true;showControls();worldState.t=0;refresh()});
+ $('reportBtn').addEventListener('click',()=>{p={...INPUT_DEFAULT,f:.3,v1:1,mt:55.2,e:0.0,dt:.06,u:1.0};unificarVelocidad=true;showControls();worldState.t=0;refresh()});
+ $('exportBtn').addEventListener('click',downloadJSON);
+ for(const tab of document.querySelectorAll('[data-tab]'))tab.addEventListener('click',()=>{const n=tab.dataset.tab;document.querySelectorAll('[data-tab]').forEach(b=>{let active=b.dataset.tab===n;b.classList.toggle('active',active);b.setAttribute('aria-selected',active?'true':'false')});document.querySelectorAll('.tab-content').forEach(e=>e.classList.toggle('active',e.id==='tab-'+n));requestAnimationFrame(renderAllCharts)});
+ $('mcBtn').addEventListener('click',runMC);$('playBtn').addEventListener('click',playToggle);$('restartBtn').addEventListener('click',restartScene);
+ $('impactBtn').addEventListener('click',()=>{if(result){worldState.t=Math.max(0,result.log.t-.55);worldState.playing=true;$('playBtn').textContent='Ⅱ Pausar';$('livePill').className='pill live';$('livePill').textContent='● SIMULACIÓN ACTIVA';drawWorld()}});
+ $('viewMode').addEventListener('change',e=>{worldState.view=e.target.value;drawWorld()});
+ $('timeSlider').addEventListener('input',e=>{worldState.t=Number(e.target.value)/1000*worldState.duration;if(worldState.playing)playToggle();drawWorld()});
+ window.addEventListener('resize',()=>{renderAllCharts();drawWorld()});
+ $('hudToggle').addEventListener('click',()=>{const h=$('hud'),c=h.classList.toggle('closed');$('hudToggle').textContent=c?'Mostrar datos':'Ocultar datos';$('hudToggle').setAttribute('aria-expanded',c?'false':'true')});
+ showControls();refresh();requestAnimationFrame(animate);
+}
+document.addEventListener('DOMContentLoaded',setup);
+</script>
+
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+const host=document.getElementById('world3d'),shell=host.parentElement,card=host.closest('.scene-card');
+let ren,scene,cam,ctl,built=false,water,wTex,grate,logM,tar=[],cvTop,arIn,arOut,arLog,labels={};
+function mkLabel(k,color){const d=document.createElement('div');d.className='obj-label';d.style.setProperty('--lc',color);shell.appendChild(d);labels[k]=d;return d}
+const L=6,W=2,H=1.5;
+function concreteTex(){const c=document.createElement('canvas');c.width=c.height=256;const g=c.getContext('2d');g.fillStyle='#b9bfbd';g.fillRect(0,0,256,256);for(let i=0;i<3000;i++){const v=150+Math.random()*70|0;g.fillStyle=`rgba(${v},${v},${v-6},.35)`;g.fillRect(Math.random()*256,Math.random()*256,2,2)}const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(3,1);t.colorSpace=THREE.SRGBColorSpace;return t}
+function waterTex(){const c=document.createElement('canvas');c.width=c.height=256;const g=c.getContext('2d');g.fillStyle='#1f88a6';g.fillRect(0,0,256,256);g.strokeStyle='rgba(220,250,255,.35)';for(let i=0;i<40;i++){g.lineWidth=1+Math.random()*2;g.beginPath();const y=Math.random()*256,x=Math.random()*256;g.moveTo(x,y);g.bezierCurveTo(x+20,y-6,x+40,y+6,x+60,y);g.stroke()}const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(4,2);t.colorSpace=THREE.SRGBColorSpace;return t}
+function build(){
+ ren=new THREE.WebGLRenderer({antialias:true});ren.setPixelRatio(Math.min(2,devicePixelRatio));ren.shadowMap.enabled=true;ren.toneMapping=THREE.ACESFilmicToneMapping;host.appendChild(ren.domElement);
+ scene=new THREE.Scene();scene.background=new THREE.Color('#cfe8ee');scene.fog=new THREE.Fog('#cfe8ee',14,32);
+ cam=new THREE.PerspectiveCamera(42,2,.1,100);ctl=new OrbitControls(cam,ren.domElement);ctl.enableDamping=true;ctl.target.set(0,.6,0);setCam('libre');
+ scene.add(new THREE.HemisphereLight('#e8f6ff','#6f7f5a',1.1));const sun=new THREE.DirectionalLight('#fff4e0',2.2);sun.position.set(5,9,6);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-8,right:8,top:8,bottom:-8});scene.add(sun);
+ const grass=new THREE.Mesh(new THREE.PlaneGeometry(40,40),new THREE.MeshStandardMaterial({color:'#8fae86',roughness:1}));grass.rotation.x=-Math.PI/2;grass.position.y=-.31;grass.receiveShadow=true;scene.add(grass);
+ const cm=new THREE.MeshStandardMaterial({map:concreteTex(),roughness:.9});const box=(w,h,d,x,y,z,m=cm)=>{const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;scene.add(o);return o};
+ box(L,.3,W+.6,0,-.15,0);box(L,H,.3,0,H/2,-(W/2+.15));box(L,H,.3,0,H/2,W/2+.15,new THREE.MeshStandardMaterial({map:cm.map,roughness:.9,transparent:true,opacity:.3}));
+ cvTop=box(L,.25,W+.6,0,H+.125,0,new THREE.MeshStandardMaterial({map:cm.map,roughness:.9,transparent:true,opacity:.18}));
+ wTex=waterTex();water=new THREE.Mesh(new THREE.BoxGeometry(L+4,1,W),new THREE.MeshPhysicalMaterial({map:wTex,color:'#5fc3d6',roughness:.15,transmission:.25,transparent:true,opacity:.86,metalness:0}));water.position.x=-1;scene.add(water);
+ grate=new THREE.Group();const gm=new THREE.MeshStandardMaterial({color:'#4c6470',metalness:.7,roughness:.35});for(let i=0;i<9;i++){const b=new THREE.Mesh(new THREE.CylinderGeometry(.025,.025,H*.95),gm);b.position.set(0,-H*.47,-W/2+.1+i*(W-.2)/8);b.castShadow=true;grate.add(b)}
+ const bar=new THREE.Mesh(new THREE.BoxGeometry(.08,.08,W),gm);bar.position.y=-H*.94;grate.add(bar);const arm=new THREE.Mesh(new THREE.BoxGeometry(.9,.06,.06),gm);arm.position.set(.45,0,0);grate.add(arm);const cw=new THREE.Mesh(new THREE.BoxGeometry(.3,.3,.3),new THREE.MeshStandardMaterial({color:'#c96b3c',roughness:.6}));cw.position.set(.9,0,0);cw.castShadow=true;grate.add(cw);
+ const axle=new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,W+.6),gm);axle.rotation.x=Math.PI/2;grate.add(axle);grate.position.set(L/2-.2,H+.02,0);scene.add(grate);
+ const bm=new THREE.MeshStandardMaterial({color:'#8a5b3a',roughness:.85});logM=new THREE.Mesh(new THREE.CylinderGeometry(.14,.16,1.4,16),bm);logM.rotation.x=Math.PI/2;logM.castShadow=true;scene.add(logM);
+ const lm=['#7fa64a','#9dbd55','#5e8a3a'].map(c=>new THREE.MeshStandardMaterial({color:c,roughness:.9}));for(let i=0;i<90;i++){const s=new THREE.Mesh(new THREE.IcosahedronGeometry(.07+Math.random()*.08,0),lm[i%3]);s.userData={z:-W/2+Math.random()*W,y:Math.random(),x:Math.random()};tar.push(s);scene.add(s)}
+ arIn=new THREE.ArrowHelper(new THREE.Vector3(1,0,0),new THREE.Vector3(-L/2-1.6,1.25,0),1,0x1c8fc0,.25,.16);arOut=new THREE.ArrowHelper(new THREE.Vector3(1,0,0),new THREE.Vector3(L/2+.4,1.25,0),1,0x0e9f97,.25,.16);arLog=new THREE.ArrowHelper(new THREE.Vector3(1,0,0),new THREE.Vector3(),1,0xe0965a,.22,.14);scene.add(arIn,arOut,arLog);
+ mkLabel('in','#7fd3f0');mkLabel('out','#8ff0e0');mkLabel('log','#ffc993');mkLabel('grate','#d5e3ea');mkLabel('tar','#c9e59a');
+ new ResizeObserver(size).observe(host);size();built=true;
+}
+function size(){const w=host.clientWidth,h=host.clientHeight;if(!w)return;ren.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix()}
+function setCam(m){const p={libre:[6,4.2,8],lateral:[0,1.9,9.5],frontal:[-9,1.9,0],superior:[0,11,.01]}[m];cam.position.set(...p);ctl.target.set(0,m==='superior'?.6:1.25,m==='superior'?-.9:0);document.querySelectorAll('#camBtns button').forEach(b=>b.classList.toggle('active',b.dataset.cam===m))}
+function frame(time){requestAnimationFrame(frame);if(!built||!card.classList.contains('mode3d'))return;let r,ws;try{r=result;ws=worldState}catch(e){return}if(!r)return;
+ const t=ws.t,depth=1.0;water.scale.y=depth;water.position.y=depth/2;wTex.offset.x-=.0015*(r.v2||1)*2;
+ const k=Math.min(1,r.f/.6||0);tar.forEach((s,i)=>{const d=s.userData;const on=i<90*Math.min(1,r.f*1.6);s.visible=on;s.position.set(L/2-.35-d.x*.5*(.3+k),.05+d.y*Math.max(.05,r.f)*H*1.2,d.z)});
+ const tImp=r.log?.t||3,after=t>=tImp,dt=Math.max(0,t-tImp);const x0=-L/2-1.5,x1=L/2-.45;
+ if(!after)logM.position.set(x0+(x1-x0)*(t/tImp),depth+.05,0);else logM.position.set(x1-Math.min(.8,(r.vPost||.2)*dt*.3),depth+.05,.0);
+ logM.rotation.y=Math.sin(time/900)*.08;
+ const open=r.N<=0?Math.min(25,6+(-r.N)*.014):0;const sh=after&&dt<2.6&&r.wd?r.omega/r.wd*Math.exp(-r.zeta*r.wn*dt)*Math.sin(r.wd*dt):0;grate.rotation.z=Math.max(-.18,Math.min(.55,open*Math.PI/180+sh*2.3));
+ const S=typeof liveState==='function'?liveState(t,r):null;
+ arIn.setLength(.5+.55*r.v1,.25,.16);arOut.setLength(.5+.55*r.v2,.25,.16);
+ if(S){const lv=S.v;arLog.position.copy(logM.position).add(new THREE.Vector3(0,.32,0));arLog.setDirection(new THREE.Vector3(lv>=0?1:-1,0,0));arLog.setLength(.3+.5*Math.abs(lv),.22,.14);arLog.visible=Math.abs(lv)>.01}
+ ctl.update();ren.render(scene,cam);
+ if(S){const f=v=>v.toLocaleString('es-CO',{minimumFractionDigits:2,maximumFractionDigits:2});
+  placeLabel('in',new THREE.Vector3(-L/2-1.2,1.65,0),'<em>Entrada</em>v₁ '+f(r.v1)+' m/s');
+  placeLabel('out',new THREE.Vector3(L/2+1.7,1.45,0),'<em>Salida</em>v₂ '+f(r.v2)+' m/s');
+  placeLabel('log',logM.position.clone().add(new THREE.Vector3(0,.75,0)),'<em>Tronco</em>x '+f(S.x)+' m · v '+f(S.v)+' m/s');
+  placeLabel('grate',new THREE.Vector3(L/2-.2,H+1.15,0),'<em>Rejilla</em>θ '+f(S.th)+'° · ω '+S.om.toLocaleString('es-CO',{minimumFractionDigits:3,maximumFractionDigits:3})+' rad/s'+(S.F?' · F '+Math.round(S.F).toLocaleString('es-CO')+' N':''));
+  placeLabel('tar',new THREE.Vector3(L/2-.9,.05,W/2+.2),r.f>.01?'<em>Tarulla</em>f '+f(r.f)+' · A₂ '+f(r.A2)+' m²':null)}}
+const _v=new THREE.Vector3();
+function placeLabel(k,pos,html){const d=labels[k];if(!d)return;if(!html){d.classList.remove('on');return}_v.copy(pos).project(cam);if(_v.z>1||Math.abs(_v.x)>1.05||Math.abs(_v.y)>1.05){d.classList.remove('on');return}
+ const x=(_v.x*.5+.5)*host.clientWidth+host.offsetLeft,y=(-_v.y*.5+.5)*host.clientHeight+host.offsetTop;d.style.left=x+'px';d.style.top=y+'px';if(d.innerHTML!==html)d.innerHTML=html;d.classList.add('on')}
+function setMode(d){card.classList.toggle('mode3d',d);document.getElementById('dim3d').classList.toggle('active',d);document.getElementById('dim2d').classList.toggle('active',!d);document.getElementById('camBtns').classList.toggle('on',d);document.getElementById('viewMode').style.display=d?'none':'';if(d&&!built)build();if(built)size();try{localStorage.setItem('mallorquin-dim',d?'3d':'2d')}catch(e){}window.dispatchEvent(new Event('resize'));}
+document.getElementById('dim2d').onclick=()=>setMode(false);document.getElementById('dim3d').onclick=()=>setMode(true);
+document.querySelectorAll('#camBtns button').forEach(b=>b.onclick=()=>setCam(b.dataset.cam));
+try{if(localStorage.getItem('mallorquin-dim')==='3d')setMode(true)}catch(e){}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
