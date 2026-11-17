@@ -213,12 +213,13 @@ st.markdown(f"""
 # -------------------------------------------------------------
 # PESTAÑAS PRINCIPALES DE VISUALIZACIÓN
 # -------------------------------------------------------------
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "📈 1. Flujo y Aceleración",
     "🪵 2. Tronco e Impacto",
     "📊 3. Libro de Energía y Rejilla",
     "🔍 4. Incertidumbre y Monte Carlo",
-    "✅ 5. Panel de Verificación Numérica"
+    "✅ 5. Panel de Verificación Numérica",
+    "🌱 6. Oxígeno y Ambiente"
 ])
 
 # -------------------------------------------------------------
@@ -495,24 +496,6 @@ with tab5:
     st.dataframe(df_verif, use_container_width=True, hide_index=True)
 
     st.markdown("---")
-    st.subheader("🌱 Contexto Ambiental: Estimación de Oxígeno Disuelto")
-    st.caption("Tabla VI del informe — Orden de magnitud ilustrativo sobre transporte de O₂ y mineralización celulósica.")
-    
-    filas_oxi = []
-    for fo in res_oxigeno.filas:
-        filas_oxi.append({
-            "Escenario": fo.escenario,
-            "Fracción f": f"{fo.f:.2f}",
-            "Área Útil (1 - f)": f"{fo.fraccion_libre:.2f}",
-            "Caudal ilustrativo Q (m³/s)": f"{fo.caudal_m3_s:.2f}",
-            "Transporte O₂ (t/día)": f"{fo.aporte_o2_t_dia:.2f}",
-            "Celulosa oxidable equivalente (t/día)": f"{fo.materia_organica_t_dia:.2f}",
-            "Estado Rejilla": fo.estado_rejilla
-        })
-    st.table(pd.DataFrame(filas_oxi))
-    st.caption(res_oxigeno.nota)
-
-    st.markdown("---")
     st.subheader("💾 Exportación y Reproducibilidad")
     col_exp1, col_exp2 = st.columns(2)
 
@@ -549,3 +532,36 @@ with tab5:
             file_name="resumen_escenarios_mallorquin.csv",
             mime="text/csv"
         )
+
+# -------------------------------------------------------------
+# TAB 6: CONTEXTO AMBIENTAL Y OXÍGENO
+# -------------------------------------------------------------
+with tab6:
+    st.subheader("🌱 Contexto Ambiental: Estimación de Oxígeno Disuelto (ABP Etapa 1)")
+    st.markdown(
+        """
+        > **[ADOPTADO] Orden de Magnitud Ilustrativo (Tabla VI del Informe)**  
+        > En la Ciénaga de Mallorquín, el oxígeno disuelto saturado de referencia es de **8,30 mg/L** a 25 °C y salinidad típica.
+        > Cada gramo de celulosa vegetal (tarulla o madera retenida) demanda aproximadamente **1,19 g de O₂** para su degradación aerobia bacteriana.
+        """
+    )
+    
+    col_ox1, col_ox2, col_ox3 = st.columns(3)
+    col_ox1.metric("Concentración O₂ ref.", "8,30 mg/L", "Saturación a 25 °C")
+    col_ox2.metric("Demanda mineralización", "1,19 g O₂ / g cel.", "Estequiometría C₆H₁₀O₅")
+    col_ox3.metric("Transporte Esc. B (f=0.30)", f"{res_oxigeno.filas[1].aporte_o2_t_dia:.2f} t O₂/día", f"Q = {res_oxigeno.filas[1].caudal_m3_s:.2f} m³/s")
+
+    st.markdown("### Comparativa de Escenarios de Transporte de O₂")
+    filas_oxi = []
+    for fo in res_oxigeno.filas:
+        filas_oxi.append({
+            "Escenario": fo.escenario,
+            "Fracción f": f"{fo.f:.2f}",
+            "Área Útil (1 - f)": f"{fo.fraccion_libre:.2f}",
+            "Caudal ilustrativo Q (m³/s)": f"{fo.caudal_m3_s:.2f}",
+            "Transporte O₂ (t/día)": f"{fo.aporte_o2_t_dia:.2f}",
+            "Celulosa oxidable equivalente (t/día)": f"{fo.materia_organica_t_dia:.2f}",
+            "Estado Rejilla": fo.estado_rejilla
+        })
+    st.table(pd.DataFrame(filas_oxi))
+    st.caption(res_oxigeno.nota)
