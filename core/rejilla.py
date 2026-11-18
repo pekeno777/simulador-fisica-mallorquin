@@ -191,3 +191,104 @@ def calcular_estatica_rejilla(
         color_semaforo=color_semaforo,
         porcentaje_tope_f0=porcentaje_tope
     )
+
+
+@dataclass
+class RejillaABP3Result:
+    """Resultados del modelo de rejilla con tirante superior y bisagra inferior (ABP 3)."""
+    f: float
+    Rx: float
+    h: float
+    y_r: float
+    y_t: float
+    y_imp: float
+    T_estatica: float
+    H_O: float
+    V_O: float
+    R_O: float
+    ang_O_deg: float
+    tau_O: float
+    # Choque rígido con v_t = v2
+    v2: float
+    m_t: float
+    e: float
+    dt: float
+    J_rigid: float
+    F_impact_media: float
+    T_impact_media: float
+    T_total_media: float
+    # Balance de energía choque rígido
+    Ei: float
+    Ef: float
+    Ediss: float
+    fraccion_disipada: float
+
+
+def calcular_rejilla_abp3(
+    Rx: float,
+    v2: float,
+    f: float = 0.30,
+    m_t: float = 60.0,
+    e: float = 0.20,
+    dt: float = 0.10,
+    h: float = 1.50,
+    m_g: float = 60.0,
+    y_imp: float = 1.20
+) -> RejillaABP3Result:
+    """
+    Calcula el equilibrio y choque del modelo oficial ABP 3:
+    Rejilla vertical 2,0 x 1,5 m con bisagra inferior en O y tirante horizontal superior.
+    - Carga hidrostática e hidrodinámica asignada: Rx global aplicada en y_r = h/3 = 0,50 m.
+    - Tirante en y_t = h = 1,50 m: T = Rx / 3.
+    - Reacción en articulación: H_O = 2*Rx / 3, V_O = m_g * g.
+    - Choque rígido adoptado con v_t = v2 (sin giro de la reja bloqueada).
+    """
+    g = 9.81
+    y_r = h / 3.0
+    y_t = h
+    tau_O = Rx * y_r
+    T_estatica = Rx / 3.0
+    H_O = Rx - T_estatica
+    V_O = m_g * g
+    R_O = float(np.hypot(H_O, V_O))
+    ang_O_deg = float(np.degrees(np.arctan2(V_O, H_O)))
+
+    # Choque rígido
+    J_rigid = m_t * (1.0 + e) * v2
+    F_impact_media = J_rigid / dt if dt > 0 else 0.0
+    T_impact_media = F_impact_media * (y_imp / h)
+    T_total_media = T_estatica + T_impact_media
+
+    # Balance de energía
+    Ei = 0.5 * m_t * (v2**2)
+    Ef = Ei * (e**2)
+    Ediss = Ei - Ef
+    fraccion_disipada = (1.0 - e**2) * 100.0
+
+    return RejillaABP3Result(
+        f=f,
+        Rx=Rx,
+        h=h,
+        y_r=y_r,
+        y_t=y_t,
+        y_imp=y_imp,
+        T_estatica=T_estatica,
+        H_O=H_O,
+        V_O=V_O,
+        R_O=R_O,
+        ang_O_deg=ang_O_deg,
+        tau_O=tau_O,
+        v2=v2,
+        m_t=m_t,
+        e=e,
+        dt=dt,
+        J_rigid=J_rigid,
+        F_impact_media=F_impact_media,
+        T_impact_media=T_impact_media,
+        T_total_media=T_total_media,
+        Ei=Ei,
+        Ef=Ef,
+        Ediss=Ediss,
+        fraccion_disipada=fraccion_disipada
+    )
+

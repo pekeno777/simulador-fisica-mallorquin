@@ -30,6 +30,7 @@ from core import (
     simular_tronco_rk4,
     calcular_estatica_rejilla,
     calcular_f_apertura,
+    calcular_rejilla_abp3,
     calcular_impacto_2x2,
     simular_contacto_dinamico,
     calcular_oxigeno_contexto,
@@ -173,6 +174,14 @@ res_impacto = calcular_impacto_2x2(
     cfg.impacto,
     v_impacto=res_tronco.vf_rk4,
     e_override=cfg.impacto.e
+)
+res_abp3 = calcular_rejilla_abp3(
+    Rx=res_flujo.Rx,
+    v2=res_flujo.v2,
+    f=cfg.flujo.f,
+    m_t=cfg.tronco.m_t,
+    e=cfg.impacto.e,
+    dt=cfg.impacto.dt_imp
 )
 res_oxigeno = calcular_oxigeno_contexto(cfg.oxigeno, cfg.flujo)
 
@@ -348,6 +357,19 @@ with tab2:
     * **Rejilla articulada (sistema 2x2):** Fuerza de impacto promedio = **{res_impacto.F_prom_art:.0f} N** | ω_f = **{res_impacto.omega_f:.4f} rad/s** | Deflexión máxima = **{res_impacto.dtheta_max_deg:.2f}°**.
     * **Verificación no tautológica (contacto finito dt = {cfg.impacto.dt_imp:.3f} s):** La hipótesis de impulso instantáneo introduce una discrepancia de **{res_impacto.error_impulso_instantaneo_pct:.1f} %** frente a la integración dinámica con torques finitos (confirmando la cota de la Tabla VIII).
     """)
+
+    st.markdown("---")
+    st.markdown("#### 🛡️ Modelo Oficial ABP 3 (Informe Final: Bisagra Inferior + Tirante Superior)")
+    st.info(
+        f"**Supuestos del ABP 3 (Tabla 6 / Diapositiva 13):** Rejilla 2,0 × 1,5 m articulada en la base O (y = 0) con tirante horizontal superior (y_t = {res_abp3.y_t:.2f} m). "
+        f"La carga axial hidrodinámica global R_x = {res_abp3.Rx:.1f} N se adopta como cota superior en y_r = h/3 = {res_abp3.y_r:.2f} m. "
+        f"En el choque rígido del informe se adopta v_t = v_2 = {res_abp3.v2:.3f} m/s; la rejilla permanece bloqueada sin bascular."
+    )
+    col_abp1, col_abp2, col_abp3, col_abp4 = st.columns(4)
+    col_abp1.metric("Tensión estática T", f"{res_abp3.T_estatica:.0f} N", "Rx / 3")
+    col_abp2.metric("Reacción horiz. Ho", f"{res_abp3.H_O:.0f} N", "2·Rx / 3")
+    col_abp3.metric("Fuerza media choque", f"{res_abp3.F_impact_media:.0f} N", f"J = {res_abp3.J_rigid:.1f} N·s")
+    col_abp4.metric("Tensión total media", f"{res_abp3.T_total_media:.0f} N", "T_est + T_imp")
 
 # -------------------------------------------------------------
 # TAB 3: LIBRO DE ENERGÍA Y REJILLA

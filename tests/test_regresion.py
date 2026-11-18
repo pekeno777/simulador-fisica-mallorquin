@@ -22,6 +22,7 @@ from core import (
     calcular_f_apertura,
     calcular_impacto_2x2,
     calcular_oxigeno_contexto,
+    calcular_rejilla_abp3,
     ejecutar_verificaciones_completas
 )
 
@@ -77,6 +78,28 @@ class TestRegresionCifrasInforme:
         assert abs(res.omega_f - 0.1434) < 0.001
         assert abs(res.J_art - 95.7) < 0.5
         assert abs(res.dtheta_max_deg - 1.15) < 0.05
+
+    def test_rejilla_abp3_tirante_y_choque_rigido(self):
+        """Regresión oficial ABP 3: T = Rx/3 = 2143 N, H_O = 4286 N, F_imp = 1029 N."""
+        fl_B = simular_flujo_rk4(self.cfg.flujo, f=0.30)
+        res_abp = calcular_rejilla_abp3(
+            Rx=fl_B.Rx,
+            v2=fl_B.v2,
+            f=0.30,
+            m_t=60.0,
+            e=0.20,
+            dt=0.10,
+            h=1.50,
+            m_g=60.0,
+            y_imp=1.20
+        )
+        assert abs(res_abp.T_estatica - 2143.0) < 1.0
+        assert abs(res_abp.H_O - 4285.9) < 1.0
+        assert abs(res_abp.V_O - 588.6) < 0.5
+        assert abs(res_abp.J_rigid - 102.86) < 0.5
+        assert abs(res_abp.F_impact_media - 1028.6) < 2.0  # ~1029 N
+        assert abs(res_abp.T_total_media - 2965.9) < 2.0
+        assert abs(res_abp.fraccion_disipada - 96.0) < 0.1
 
 
 class TestCasosLimite:
